@@ -12,7 +12,7 @@ const axiosInstance = axios.create({
     Authorization: `Bearer ${userData?.access_token}`,
   },
 });
-console.log("User data:", userData);
+
 axiosInstance.interceptors.response.use(
   (response) => response,
   async (error) => {

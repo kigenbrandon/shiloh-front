@@ -24,7 +24,7 @@ const StudentDashboard = () => {
   const [open, setOpen] = useState(false);
   const isSmallScreen = useMediaQuery('(max-width:600px)');
   const [loading, setLoading] = useState(true);
-  const user = JSON.parse(localStorage.getItem('user'))
+  const user = JSON.parse(localStorage.getItem('userDATA'));
   const [selectedSection, setSelectedSection] = useState('dashboard'); 
   const [currentComponent, setCurrentComponent] = useState(<StudentdashboardOverview/>);
   const drawerWidth = 250;
@@ -85,7 +85,7 @@ const StudentDashboard = () => {
       >
         <Box sx={{ padding: 4 }}>
           <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
-            {loading ? (
+            {user.profileImage ? (
               <Skeleton variant="circular" width={50} height={50} />
             ) : user.profileImage ? (
               <img
@@ -99,18 +99,13 @@ const StudentDashboard = () => {
               </Avatar>
             )}
             <Box>
-              {loading ? (
-                <>
-                  <Skeleton width={100} />
-                  <Skeleton width={80} />
-                </>
-              ) : (
+              
                 <>
                   <Typography variant="body2">Welcome</Typography>
                   <Typography variant="h6">{user.username}</Typography>
                   <Typography variant="body2" sx={{ color: "gray" }}>Student</Typography>
                 </>
-              )}
+            
             </Box>
           </Box>
         </Box>
