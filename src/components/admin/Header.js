@@ -58,107 +58,74 @@ const Header = () => {
 // #####################################################################
 
   return (
-    <AppBar position="sticky" sx={{ backgroundColor: 'secondary.main', padding: 2 }}>
-      <Toolbar sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <Typography variant="h6" sx={{ fontWeight: 'bold' }}>Dashboard</Typography>
+    <AppBar
+  position="sticky"
+  sx={{
+    backgroundColor: 'secondary.main',
+    padding: 2,
+    marginTop: 0, // Ensure no margin above the AppBar
+    zIndex: (theme) => theme.zIndex.drawer + 1, // Place above other elements like drawers
+  }}
+>
+  <Toolbar
+    sx={{
+      display: 'flex',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+    }}
+  >
+    <Typography variant="h6" sx={{ fontWeight: 'bold' }}>
+      Dashboard
+    </Typography>
 
-        <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, flexWrap: 'wrap', justifyContent: 'flex-end' }}>
-      <Box sx={{ position: 'relative', width: { xs: '100%', sm: '300px' } }}>
-      <Autocomplete
-      freeSolo
-      id="search-bar"
-      disableClearable
-      options={filteredResults.map((option) => option.description)}
-      onInputChange={(event, newInputValue) => setInputValue(newInputValue)}
-      renderInput={(params) => (
-        <TextField
-          {...params}
-          label="Search"
-          fullWidth
-          sx={{
-            backgroundColor: 'white',
-            borderRadius: 2,
-            boxShadow: 3,
-            '& .MuiInputBase-root': {
-              paddingLeft: 4,
-              fontSize: '1rem',
-              height: '45px', // Adjusted height for better UI
-            },
-            '& .MuiOutlinedInput-notchedOutline': {
-              borderColor: 'transparent',
-            },
-            '&:hover .MuiOutlinedInput-notchedOutline': {
-              borderColor: 'transparent',
-            },
-            '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
-              borderColor: 'transparent',
-            },
-            '&:hover': {
-              boxShadow: '0 6px 12px rgba(0, 0, 0, 0.1)', // Hover effect
-            },
-            // Gradient Label
-            '& .MuiInputLabel-root': {
-              fontWeight: 500,
-              background:'linear-gradient(to bottom, #fff, #000)',
-              WebkitBackgroundClip: 'text', // Clip the background to the text
-              color: 'transparent', // Make the text color transparent so gradient shows
-              padding: '0 4px', // Prevent clipping of the label text
-            },
-          }}
-          slotProps={{
-            input: {
-              ...params.InputProps,
-              startAdornment: (
-                <IconButton sx={{ position: 'absolute', left: 8, color: '#007bff' }}>
-                  <Search sx={{ fontSize: 24 }} />
-                </IconButton>
-              ),
-              type: 'search',
-            },
-          }}
-        />
-      )}
-    />
+    <Box
+      sx={{
+        display: 'flex',
+        alignItems: 'center',
+        gap: 2,
+        flexWrap: 'wrap',
+        justifyContent: 'flex-end',
+      }}
+    >
+      <Box sx={{ display: 'flex', gap: 2 }}>
+        <IconButton sx={{ position: 'relative' }}>
+          <Notifications sx={{ color: 'white' }} />
+          <Badge
+            badgeContent={0}
+            color="error"
+            sx={{
+              position: 'absolute',
+              bottom: 4,
+              left: 3,
+              fontSize: '0.75rem',
+              fontWeight: 'bold',
+              borderRadius: '50%',
+              padding: '0 5px',
+            }}
+          />
+        </IconButton>
+
+        <IconButton sx={{ position: 'relative' }}>
+          <Email sx={{ color: 'white' }} />
+          <Badge
+            badgeContent={0}
+            color="warning"
+            sx={{
+              position: 'absolute',
+              bottom: 4,
+              left: 3,
+              fontSize: '0.75rem',
+              fontWeight: 'bold',
+              borderRadius: '50%',
+              padding: '0 5px',
+            }}
+          />
+        </IconButton>
       </Box>
+    </Box>
+  </Toolbar>
+</AppBar>
 
-          <Box sx={{ display: 'flex', gap: 2 }}>
-            <IconButton sx={{ position: 'relative' }}>
-              <Notifications sx={{ color: 'white' }} />
-              <Badge
-                badgeContent={9}
-                color="error"
-                sx={{
-                  position: 'absolute',
-                  bottom: 4,
-                  left: 3,
-                  fontSize: '0.75rem',
-                  fontWeight: 'bold',
-                  borderRadius: '50%',
-                  padding: '0 5px',
-                }}
-              />
-            </IconButton>
-
-            <IconButton sx={{ position: 'relative' }}>
-              <Email sx={{ color: 'white' }} />
-              <Badge
-                badgeContent={3}
-                color="warning"
-                sx={{
-                  position: 'absolute',
-                  bottom: 4,
-                  left: 3,
-                  fontSize: '0.75rem',
-                  fontWeight: 'bold',
-                  borderRadius: '50%',
-                  padding: '0 5px',
-                }}
-              />
-            </IconButton>
-          </Box>
-        </Box>
-      </Toolbar>
-    </AppBar>
   );
 };
 

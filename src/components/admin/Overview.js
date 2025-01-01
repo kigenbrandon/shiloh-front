@@ -4,7 +4,7 @@ import Chart from "chart.js/auto";
 import axios from "axios";
 
 // Load userData from localStorage
-const userData = JSON.parse(localStorage.getItem("userData"));
+const userData = JSON.parse(localStorage.getItem("userDATA"));
 
 const axiosInstance = axios.create({
   baseURL: "http://localhost:5000", // Replace with your API base URL
@@ -12,7 +12,7 @@ const axiosInstance = axios.create({
     Authorization: `Bearer ${userData?.access_token}`,
   },
 });
-
+console.log("User data:", userData);
 axiosInstance.interceptors.response.use(
   (response) => response,
   async (error) => {
@@ -28,7 +28,8 @@ axiosInstance.interceptors.response.use(
           ...userData,
           access_token: refreshResponse.data.access_token,
         };
-        localStorage.setItem("userData", JSON.stringify(updatedData));
+        console.log("Token refreshed:", updatedData);
+        localStorage.setItem("userDATA", JSON.stringify(updatedData));
         axiosInstance.defaults.headers.Authorization = `Bearer ${updatedData.access_token}`;
         error.config.headers.Authorization = `Bearer ${updatedData.access_token}`;
         return axiosInstance(error.config);

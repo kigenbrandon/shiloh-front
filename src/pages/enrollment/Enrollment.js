@@ -1,19 +1,39 @@
 import React, { useState, useEffect } from "react";
-import { Box, Typography, TextField, Button, CircularProgress, Snackbar, Alert, useTheme } from "@mui/material";
+import { 
+  Box, 
+  Typography, 
+  TextField, 
+  Button, 
+  CircularProgress, 
+  Snackbar, 
+  Alert, 
+  useTheme 
+} from "@mui/material";
 import { useDropzone } from 'react-dropzone';
 import "./enrollment.css";
 
 const Enrollment = () => {
-  const theme = useTheme();  // Access the MUI theme
+  const theme = useTheme(); // Access the MUI theme
   const [courses, setCourses] = useState([]);
   const [loading, setLoading] = useState(true);
+
+  // Safely extract studentId from localStorage
+  let userData = {};
+  try {
+    userData = JSON.parse(localStorage.getItem("userDATA")) || {};
+  } catch (error) {
+    console.error("Error parsing userDATA from localStorage:", error);
+  }
+  const studentId = userData.student.id || ""; // Safely handle missing student_id
+
   const [formData, setFormData] = useState({
-    studentId: "",
+    studentId: studentId,
     email: "",
     phoneNumber: "",
     selectedCourses: [],
     documents: [],
   });
+
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
   const [snackbarSeverity, setSnackbarSeverity] = useState("success");
@@ -90,7 +110,7 @@ const Enrollment = () => {
       console.log("Enrollment success:", result);
 
       setFormData({
-        studentId: "",
+        studentId: studentId,
         email: "",
         phoneNumber: "",
         selectedCourses: [],
@@ -156,16 +176,6 @@ const Enrollment = () => {
           name="email"
           value={formData.email}
           onChange={handleInputChange}
-          sx={{ mb: 2 }}
-        />
-
-        <TextField
-          fullWidth
-          label="Student ID"
-          name="studentId"
-          value={formData.studentId}
-          onChange={handleInputChange}
-          required
           sx={{ mb: 2 }}
         />
 
