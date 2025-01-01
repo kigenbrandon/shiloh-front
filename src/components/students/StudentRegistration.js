@@ -48,7 +48,7 @@ export const StudentRegistration = () => {
             try {
                 const { confirm_password, ...submissionData } = values; // Remove confirm_password from the data to send
 
-                const response = await fetch(`https://shiloh-server.onrender.com//students`, {
+                const response = await fetch(`https://shiloh-server.onrender.com/students`, {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",

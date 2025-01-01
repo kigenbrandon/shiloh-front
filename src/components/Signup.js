@@ -35,7 +35,7 @@
         setErrorMessage(null);
 
         try {
-          const response = await fetch(`https://shiloh-server.onrender.com//users`, {
+          const response = await fetch(`https://shiloh-server.onrender.com/users`, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',

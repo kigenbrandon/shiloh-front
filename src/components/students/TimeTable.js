@@ -26,7 +26,7 @@ function ScheduleClass() {
     }, []);
 
     const handleSchedule = () => {
-        axios.post('https://shiloh-server.onrender.com//timetable', schedule)
+        axios.post('https://shiloh-server.onrender.com/timetable', schedule)
             .then(response => {
                 // Handle success
             })
