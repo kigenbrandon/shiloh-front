@@ -7,7 +7,7 @@ import axios from "axios";
 const userData = JSON.parse(localStorage.getItem("userData"));
 
 const axiosInstance = axios.create({
-  baseURL: "https://shiloh-server.onrender.com/", // Replace with your API base URL
+  baseURL: "http://localhost:5000", // Replace with your API base URL
   headers: {
     Authorization: `Bearer ${userData?.access_token}`,
   },
@@ -19,7 +19,7 @@ axiosInstance.interceptors.response.use(
     if (error.response?.status === 401) {
       try {
         // Refresh token
-        const refreshResponse = await axios.post("https://shiloh-server.onrender.com//users/refresh", {
+        const refreshResponse = await axios.post("http://localhost:5000/users/refresh", {
           refresh_token: userData.refresh_token,
         });
 
@@ -52,9 +52,11 @@ const Dashboard = () => {
     try {
       const attendanceReport = await axiosInstance.get("/attendance/report");
       const studentData = await axiosInstance.get("/students");
+      const teacherData = await axiosInstance.get("/teachers");
       setData({
         attendance: attendanceReport.data,
         students: studentData.data,
+        teachers: teacherData.data,
       });
     } catch (error) {
       console.error("Error fetching data: ", error);
@@ -102,9 +104,9 @@ const Dashboard = () => {
         "pie",
         ["Present", "Absent", "Late"],
         [
-          data.attendance.present || 0,
-          data.attendance.absent || 0,
-          data.attendance.late || 0,
+          data.attendance.present || 1,
+          data.attendance.absent || 1,
+          data.attendance.late || 1,
         ],
         ["#4caf50", "#f44336", "#ffc107"]
       );
@@ -163,6 +165,20 @@ const Dashboard = () => {
                 Student Statistics
               </Typography>
               <Typography>Total Students: {data.students?.length || 0}</Typography>
+            </Paper>
+          </Box>
+
+          {/* Teacher Statistics Section */}
+          <Box
+            flex="1 1 300px"
+            minWidth="300px"
+            sx={{ boxShadow: 3, borderRadius: 2 }}
+          >
+            <Paper sx={{ padding: 3, backgroundColor: "#ffffff" }}>
+              <Typography variant="h6" sx={{ color: "#1976d2" }}>
+                Teacher Statistics
+              </Typography>
+              <Typography>Total Teachers: {data.teachers?.length || 0}</Typography>
             </Paper>
           </Box>
 

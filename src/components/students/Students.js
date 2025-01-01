@@ -127,7 +127,7 @@ const StudentsPage = () => {
 
   // Fetch students from the API when the component mounts
   useEffect(() => {
-    fetch('https://shiloh-server.onrender.com//users')
+    fetch('https://shiloh-server.onrender.com/users')
       .then((response) => response.json())
       .then((data) => {
         const studentData = data.filter(user => user.role === 'student');

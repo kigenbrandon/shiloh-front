@@ -133,7 +133,7 @@ const Home = () => {
         <Typography variant="h4" sx={{ fontWeight: 'bold', marginBottom: 3 }}>
           Ready to Start Your Journey with Us?
         </Typography>
-        <Button variant="contained" color="secondary" size="large" href="/register">
+        <Button variant="contained" color="secondary" size="large" href="/student/registration">
           Join Now
         </Button>
       </Box>
