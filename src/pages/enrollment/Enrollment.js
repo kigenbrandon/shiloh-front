@@ -6,25 +6,23 @@ import {
   Button, 
   CircularProgress, 
   Snackbar, 
-  Alert, 
-  useTheme 
+  Alert 
 } from "@mui/material";
 import { useDropzone } from 'react-dropzone';
 import "./enrollment.css";
 
 const Enrollment = () => {
-  const theme = useTheme(); // Access the MUI theme
   const [courses, setCourses] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [fileError, setFileError] = useState(""); // State for file validation error
 
-  // Safely extract studentId from localStorage
   let userData = {};
   try {
     userData = JSON.parse(localStorage.getItem("userDATA")) || {};
   } catch (error) {
     console.error("Error parsing userDATA from localStorage:", error);
   }
-  const studentId = userData.student.id || ""; // Safely handle missing student_id
+  const studentId = userData.student?.id || "";
 
   const [formData, setFormData] = useState({
     studentId: studentId,
@@ -38,7 +36,6 @@ const Enrollment = () => {
   const [snackbarMessage, setSnackbarMessage] = useState("");
   const [snackbarSeverity, setSnackbarSeverity] = useState("success");
 
-  // Fetch courses when the component mounts
   useEffect(() => {
     const fetchCourses = async () => {
       try {
@@ -58,7 +55,6 @@ const Enrollment = () => {
     fetchCourses();
   }, []);
 
-  // Handle form input changes
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({
@@ -67,11 +63,19 @@ const Enrollment = () => {
     }));
   };
 
-  // Handle file selection via Dropzone
   const onDrop = (acceptedFiles) => {
+    setFileError(""); // Clear file error on new file selection
+    const allowedExtensions = /\.(pdf|doc|docx|jpg|jpeg|png)$/i;
+
+    const invalidFiles = acceptedFiles.filter((file) => !allowedExtensions.test(file.name));
+    if (invalidFiles.length > 0) {
+      setFileError("Invalid file types. Allowed: .pdf, .doc, .docx, .jpg, .jpeg, .png.");
+      return;
+    }
+
     setFormData((prevData) => ({
       ...prevData,
-      documents: acceptedFiles, // Store the selected files
+      documents: acceptedFiles,
     }));
   };
 
@@ -81,17 +85,19 @@ const Enrollment = () => {
     multiple: true,
   });
 
-  // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const formDataToSubmit = new FormData();
 
+    if (formData.documents.length === 0) {
+      setFileError("Please upload at least one document before submitting.");
+      return;
+    }
+
+    const formDataToSubmit = new FormData();
     formDataToSubmit.append('phone_number', formData.phoneNumber);
     formDataToSubmit.append('student_id', formData.studentId);
     formDataToSubmit.append('email', formData.email || "");
     formDataToSubmit.append('courses', formData.selectedCourses);
-
-    // Append documents to FormData object
     formData.documents.forEach((file) => {
       formDataToSubmit.append('document_file', file);
     });
@@ -128,7 +134,6 @@ const Enrollment = () => {
     }
   };
 
-  // Handle Snackbar close
   const handleCloseSnackbar = () => {
     setSnackbarOpen(false);
   };
@@ -140,7 +145,7 @@ const Enrollment = () => {
         justifyContent: "center",
         alignItems: "center",
         minHeight: "100vh",
-        bgcolor: "background.default", // Theme-based background color
+        bgcolor: "background.default",
         padding: 2,
       }}
     >
@@ -150,7 +155,7 @@ const Enrollment = () => {
         sx={{
           width: "100%",
           maxWidth: 500,
-          bgcolor: "background.paper", // Theme-based paper background
+          bgcolor: "background.paper",
           p: 4,
           borderRadius: 2,
           boxShadow: 3,
@@ -217,10 +222,9 @@ const Enrollment = () => {
           )}
         </select>
 
-        {/* File upload section */}
         <Box
           sx={{
-            border: `2px dashed ${theme.palette.divider}`, // Use theme-based border color
+            border: `2px dashed`,
             padding: 2,
             borderRadius: 1,
             textAlign: "center",
@@ -232,6 +236,11 @@ const Enrollment = () => {
           <Typography variant="body1">
             Drag & drop documents here, or click to select files
           </Typography>
+          {fileError && (
+            <Typography color="error" variant="body2" sx={{ mt: 1 }}>
+              {fileError}
+            </Typography>
+          )}
           {formData.documents.length > 0 && (
             <Box sx={{ mt: 2 }}>
               <Typography variant="body2">
@@ -254,7 +263,6 @@ const Enrollment = () => {
         </Button>
       </Box>
 
-      {/* Snackbar for success/error message */}
       <Snackbar
         open={snackbarOpen}
         autoHideDuration={6000}

@@ -63,14 +63,12 @@ const Login = () => {
       justifyContent="center"
       alignItems="center"
       minHeight="100vh"
-      bgcolor="background.default"
     >
       <Box
         component="form"
         onSubmit={formik.handleSubmit}
         width="100%"
         maxWidth="400px"
-        bgcolor="white"
         p={4}
         borderRadius={2}
         boxShadow={3}
@@ -79,7 +77,7 @@ const Login = () => {
           variant="h4" 
           align="center" 
           gutterBottom
-          color={theme.palette.primary} // Adjust the color based on the theme
+          color="primary" // Use the primary color from the theme
         >
           Login
         </Typography>
@@ -101,6 +99,7 @@ const Login = () => {
           onBlur={formik.handleBlur}
           error={formik.touched.username && Boolean(formik.errors.username)}
           helperText={formik.touched.username && formik.errors.username}
+          color="secondary"
         />
         <TextField
           fullWidth
@@ -114,7 +113,7 @@ const Login = () => {
           onBlur={formik.handleBlur}
           error={formik.touched.password && Boolean(formik.errors.password)}
           helperText={formik.touched.password && formik.errors.password}
-          color={"secondary"}
+          color="secondary"
         />
         <Button
           fullWidth

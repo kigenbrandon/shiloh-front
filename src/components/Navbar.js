@@ -40,14 +40,27 @@ const Navbar = () => {
 
   ];
 
-  const filteredMenuItems = menuItems.filter(item => {
+  const filteredMenuItems = menuItems
+  .filter((item) => {
     if (!item.authRequired) return true;
 
     if (isAuthenticated() && item.roles && item.roles.includes(user?.role)) {
       return true;
     }
     return false;
-  }).filter(item => !(isAuthenticated() && item.label === 'Sign Up'));
+  })
+  .filter((item) => {
+    // Exclude "Sign Up" for authenticated users
+    if (isAuthenticated() && item.label === "Sign Up") return false;
+
+    // Exclude "Student Registration" for students
+    if (isAuthenticated() && user?.role === "student" && item.label === "Student Registration") {
+      return false;
+    }
+
+    return true;
+  });
+
 
   return (
     <AppBar position="sticky" sx={{ backgroundColor: '#1976d2', zIndex: 1333, width: '100%', display: 'flex' }}>
