@@ -208,7 +208,7 @@ const StudentDashboard = () => {
             onClick={() => setSelectedSection('logout')}
           >
             Logout
-          </Button>
+          </Button> 
         </Box>
       </Drawer>
 

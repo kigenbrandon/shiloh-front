@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { useNavigate } from 'react-router-dom';
-import { TextField, Button, Typography, Box, Alert } from '@mui/material';
+import { TextField, Button, Typography, Box, Alert, CircularProgress } from '@mui/material';
 import axios from 'axios';
 import { useAuth } from './context/AuthContext.js';
 import { login as userLogin } from '../api.js';
@@ -10,6 +10,7 @@ import { useTheme } from '@mui/material/styles'; // Import the useTheme hook
 
 const Login = () => {
   const [errorMessage, setErrorMessage] = useState(null);
+  const [loading, setLoading] = useState(false);  // State for loading
   const navigate = useNavigate();
   const { login } = useAuth();
   const baseUrl = process.env.REACT_APP_BASE_URL;  // Correct access to environment variable
@@ -27,6 +28,7 @@ const Login = () => {
       password: Yup.string().required('Password is required'),
     }),
     onSubmit: async (values) => {
+      setLoading(true);  // Set loading to true when submitting
       try {
         const response = await axios.post(`https://shiloh-server.onrender.com/users/login`, values, {
           headers: {
@@ -36,7 +38,7 @@ const Login = () => {
 
         if (response.status === 200) {
           const { access_token, username, email, role, refresh_token } = response.data;
-          localStorage.setItem('userDATA',JSON.stringify(response.data))
+          localStorage.setItem('userDATA', JSON.stringify(response.data))
 
           if (access_token && username && email && role && refresh_token) {
             login(access_token, refresh_token, { username, role, email });
@@ -53,6 +55,8 @@ const Login = () => {
 
         setErrorMessage(errorMsg);
         console.error('Login failed:', errorMsg);
+      } finally {
+        setLoading(false);  // Set loading to false once the request is finished
       }
     },
   });
@@ -90,15 +94,15 @@ const Login = () => {
 
         <TextField
           fullWidth
-          label="email"
+          label="Email"
           name="email"
           variant="outlined"
           margin="normal"
-          value={formik.values.username}
+          value={formik.values.email}
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}
-          error={formik.touched.username && Boolean(formik.errors.email)}
-          helperText={formik.touched.username && formik.errors.email}
+          error={formik.touched.email && Boolean(formik.errors.email)}
+          helperText={formik.touched.email && formik.errors.email}
           color="secondary"
         />
         <TextField
@@ -121,8 +125,13 @@ const Login = () => {
           color="primary"
           type="submit"
           sx={{ mt: 2 }}
+          disabled={loading}  // Disable the button if loading is true
         >
-          Login
+          {loading ? (
+            <CircularProgress size={24} color="inherit" />  // Show spinner if loading
+          ) : (
+            'Login'
+          )}
         </Button>
       </Box>
     </Box>
