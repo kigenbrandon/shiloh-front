@@ -5,19 +5,13 @@ import { useNavigate } from 'react-router-dom';
 import { TextField, Button, Typography, Box, Alert, CircularProgress } from '@mui/material';
 import axios from 'axios';
 import { useAuth } from './context/AuthContext.js';
-import { login as userLogin } from '../api.js';
-import { useTheme } from '@mui/material/styles'; // Import the useTheme hook
 
 const Login = () => {
   const [errorMessage, setErrorMessage] = useState(null);
   const [loading, setLoading] = useState(false);  // State for loading
   const navigate = useNavigate();
   const { login } = useAuth();
-  const baseUrl = process.env.REACT_APP_BASE_URL;  // Correct access to environment variable
-  const theme = useTheme(); // Access the current theme
   
-  console.log('Base URL:', baseUrl);  // Log to ensure it is loaded
-
   const formik = useFormik({
     initialValues: {
       email: '',

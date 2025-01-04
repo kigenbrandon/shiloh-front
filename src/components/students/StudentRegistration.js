@@ -55,17 +55,17 @@ export const StudentRegistration = () => {
                     },
                     body: JSON.stringify(submissionData), // Send the form data excluding the confirm_password
                 });
+                console.log(response);
 
                 if (response.ok) {
-                    const data = await response.json();
-                    setAuth({ user: data, role: "student" });
                     enqueueSnackbar('Registration successful!', { variant: 'success' });
-                    navigate("/enrollment");
+                    navigate("/login");
                 } else {
                     const errorData = await response.json();
                     enqueueSnackbar(errorData.message || 'Registration failed', { variant: 'error' });
                 }
             } catch (error) {
+                // console.error('An error occurred:', error);
                 enqueueSnackbar('An error occurred. Please try again later.', { variant: 'error' });
             }
             finally {
