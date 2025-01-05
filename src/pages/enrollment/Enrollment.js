@@ -10,6 +10,7 @@ import {
 } from "@mui/material";
 import { useDropzone } from 'react-dropzone';
 import "./enrollment.css";
+import { useNavigate } from "react-router-dom";
 
 const Enrollment = () => {
   const [courses, setCourses] = useState([]);
@@ -35,6 +36,8 @@ const Enrollment = () => {
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
   const [snackbarSeverity, setSnackbarSeverity] = useState("success");
+  const navigate = useNavigate();
+  
 
   useEffect(() => {
     const fetchCourses = async () => {
@@ -110,11 +113,12 @@ const Enrollment = () => {
 
       if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status}`);
+        
       }
 
       const result = await response.json();
       console.log("Enrollment success:", result);
-
+      
       setFormData({
         studentId: studentId,
         email: "",
@@ -126,6 +130,7 @@ const Enrollment = () => {
       setSnackbarSeverity("success");
       setSnackbarMessage("Course registered successfully!");
       setSnackbarOpen(true);
+      navigate("/student");
     } catch (error) {
       console.error("Error submitting form data:", error);
       setSnackbarSeverity("error");

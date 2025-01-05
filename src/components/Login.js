@@ -38,6 +38,7 @@ const Login = () => {
             login(access_token, refresh_token, { username, role, email });
             if (role === 'student') navigate('/enrollment');
             if (role === 'admin') navigate('/admin');
+            if (role === 'user') navigate('/home');
           } else {
             setErrorMessage('Invalid login data received.');
           }

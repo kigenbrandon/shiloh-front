@@ -1,19 +1,15 @@
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useFormik } from "formik";
 import * as Yup from 'yup';
 import { useSnackbar } from "notistack";
-import { AuthContext } from "../context/AuthContext";
 import { Box, Button, Container, TextField, Typography, Select, MenuItem, InputLabel, FormControl, useTheme } from "@mui/material";
 
 export const StudentRegistration = () => {
-    const { setAuth } = useContext(AuthContext);
     const navigate = useNavigate();
     const { enqueueSnackbar } = useSnackbar();
     const [loading, setLoading] = useState(false);
     const theme = useTheme(); // Access theme for dynamic styling
-
-    const baseUrl = process.env.BASE_URL;
 
     const formik = useFormik({
         initialValues: {
@@ -65,7 +61,6 @@ export const StudentRegistration = () => {
                     enqueueSnackbar(errorData.message || 'Registration failed', { variant: 'error' });
                 }
             } catch (error) {
-                // console.error('An error occurred:', error);
                 enqueueSnackbar('An error occurred. Please try again later.', { variant: 'error' });
             }
             finally {
