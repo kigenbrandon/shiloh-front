@@ -78,11 +78,24 @@ const StudentReport = () => {
               <Avatar alt={student.name} src="/static/images/avatar/1.jpg" />
             </StyledBadge>
             <Box>
-              <Typography variant="h4" sx={{ fontWeight: 'bold' }}>{student.name}</Typography>
-              <Typography variant="body1">ID: {student.student_id}</Typography>
-              <Typography variant="body1">Phone: {student.phone_number}</Typography>
-              <Typography variant="body1">Email: {student.email}</Typography>
-              <Typography variant="body1">Enrolled on: {new Date(student.enrolled_date).toLocaleDateString()}</Typography>
+            <Box>
+              <Typography variant="h4" sx={{ fontWeight: 'bold', color: 'primary.main' }}>
+                {student.name}
+              </Typography>
+              <Typography variant="body1" sx={{ color: 'primary.main' }}>
+                ID: {student.student_id}
+              </Typography>
+              <Typography variant="body1" sx={{ color: 'primary.main' }}>
+                Phone: {student.phone_number}
+              </Typography>
+              <Typography variant="body1" sx={{ color: 'primary.main' }}>
+                Email: {student.email}
+              </Typography>
+              <Typography variant="body1" sx={{ color: 'primary.main' }}>
+                Enrolled on: {new Date(student.enrolled_date).toLocaleDateString()}
+              </Typography>
+            </Box>
+
             </Box>
           </>
         ) : (
@@ -93,39 +106,49 @@ const StudentReport = () => {
       <Divider sx={{ margin: '20px 0' }} />
 
       {/* Courses List Section */}
-      <Typography variant="h5" sx={{ fontWeight: 'bold', marginBottom: 2 }}>
-        {courses ? 'Course List' : <Skeleton width="50%" />}
-      </Typography>
-      {courses ? (
-        courses.map((course, index) => (
-          <Accordion key={index}>
-            <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-              <Typography variant="h6">{course.courses}</Typography>
-            </AccordionSummary>
-            <AccordionDetails>
-              <Typography variant="body1">Grade: {course.grade || 'Not Available'}</Typography>
-              <Typography variant="body1">Status: {course.status}</Typography>
-              <Typography variant="body1">Progress: {course.progress}%</Typography>
-            </AccordionDetails>
-          </Accordion>
-        ))
-      ) : (
-        <Skeleton variant="rectangular" width="100%" height={100} />
-      )}
+      <Typography variant="h5" sx={{ fontWeight: 'bold', marginBottom: 2, color: 'primary.main' }}>
+          {courses ? 'Course List' : <Skeleton width="50%" />}
+        </Typography>
 
-      <Divider sx={{ margin: '20px 0' }} />
-
-      {/* Performance Overview Section */}
-      <Typography variant="h5" sx={{ fontWeight: 'bold', marginBottom: 2 }}>
-        {performanceData ? 'Performance Overview' : <Skeleton width="50%" />}
-      </Typography>
-      <Box sx={{ marginBottom: 3 }}>
-        {performanceData ? (
-          <Bar data={performanceData} options={{ responsive: true }} />
+        {courses ? (
+          courses.map((course, index) => (
+            <Accordion key={index}>
+              <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+                <Typography variant="h6" sx={{ color: 'primary.main' }}>
+                  {course.courses}
+                </Typography>
+              </AccordionSummary>
+              <AccordionDetails>
+                <Typography variant="body1" sx={{ color: 'primary.main' }}>
+                  Grade: {course.grade || 'Not Available'}
+                </Typography>
+                <Typography variant="body1" sx={{ color: 'primary.main' }}>
+                  Status: {course.status}
+                </Typography>
+                <Typography variant="body1" sx={{ color: 'primary.main' }}>
+                  Progress: {course.progress}%
+                </Typography>
+              </AccordionDetails>
+            </Accordion>
+          ))
         ) : (
-          <Skeleton variant="rectangular" width="100%" height={300} />
+          <Skeleton variant="rectangular" width="100%" height={100} />
         )}
-      </Box>
+
+        <Divider sx={{ margin: '20px 0' }} />
+
+        {/* Performance Overview Section */}
+        <Typography variant="h5" sx={{ fontWeight: 'bold', marginBottom: 2, color: 'primary.main' }}>
+          {performanceData ? 'Performance Overview' : <Skeleton width="50%" />}
+        </Typography>
+        <Box sx={{ marginBottom: 3 }}>
+          {performanceData ? (
+            <Bar data={performanceData} options={{ responsive: true }} />
+          ) : (
+            <Skeleton variant="rectangular" width="100%" height={300} />
+          )}
+        </Box>
+
 
       <Divider sx={{ margin: '20px 0' }} />
     </Container>

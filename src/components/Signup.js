@@ -14,6 +14,7 @@ const Signup = () => {
     initialValues: {
       username: '',
       email: '',
+      role: '',
       password: '',
       confirmPassword: '',  // Keep confirmPassword for validation
     },
