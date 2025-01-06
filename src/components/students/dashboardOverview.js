@@ -8,37 +8,8 @@ const StudentdashboardOverview = () => {
   const [loading, setLoading] = useState(true);
 
   // Provided Data
-  const data = {
-    country_id: 3,
-    id: 1,
-    grades: [],
-    phone_number: "(398)581-5753",
-    email: "christina05@example.com",
-    invoices: [],
-    user_id: 4,
-    teacher_id: null,
-    enrollments: [
-      {
-        document_file: null,
-        enrollment_date: "2024-08-02 15:16:49",
-        student_id: 1,
-        id: 38,
-        courses: "Linguistics, Psychiatry, Foreign Languages",
-        phone_number: "(398)581-5753",
-      },
-      {
-        document_file: null,
-        enrollment_date: "2024-10-21 07:35:37",
-        student_id: 1,
-        id: 39,
-        courses: "Music Theory",
-        phone_number: "(398)581-5753",
-      },
-    ],
-    student_id: "GB001",
-    name: "Dawn Cox",
-    enrolled_date: "2024-12-08 07:30:59",
-  };
+  const data = JSON.parse(localStorage.getItem("userDATA"));
+  console.log(data);
 
   // Simulate a loading state
   useEffect(() => {
@@ -65,7 +36,7 @@ const StudentdashboardOverview = () => {
             </Box>
           ))
         ) : (
-          data.enrollments.map((enrollment, index) => (
+          data.student.enrollments.map((enrollment, index) => (
             <Box key={index} sx={{ mb: 3 }}>
               <Typography variant="body1" sx={{ fontWeight: "bold" }}>{enrollment.courses}</Typography>
               <Typography variant="body2" sx={{ color: "gray" }}>
@@ -80,9 +51,9 @@ const StudentdashboardOverview = () => {
 
   // Render Stats UI
   const stats = [
-    { label: "Enrollments", count: data.enrollments.length, icon: <DashboardIcon /> },
+    { label: "Enrollments", count: data.student.enrollments.length, icon: <DashboardIcon /> },
     { label: "Completed Courses", count: 0, icon: <StarIcon /> },
-    { label: "Total Invoices", count: data.invoices.length, icon: <ExitToAppIcon /> },
+    { label: "Total Invoices", count: 0, icon: <ExitToAppIcon /> },
   ];
 
   const renderStats = () => (

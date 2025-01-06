@@ -4,7 +4,7 @@ import { Bar } from 'react-chartjs-2';
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip as ChartTooltip } from 'chart.js';
 import { ExpandMore as ExpandMoreIcon } from '@mui/icons-material';
 
-// Initialize chart.js plugins
+
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, ChartTooltip);
 
 const StyledBadge = styled(Badge)(({ theme }) => ({
@@ -37,19 +37,19 @@ const StyledBadge = styled(Badge)(({ theme }) => ({
 }));
 
 const StudentReport = () => {
-  const [student, setStudent] = useState(null);  // Set to null initially to check loading state
-  const [courses, setCourses] = useState(null);  // Set to null initially to check loading state
-  const [performanceData, setPerformanceData] = useState(null);  // Set to null initially to check loading state
+  const [student, setStudent] = useState(null);  
+  const [courses, setCourses] = useState(null);  
+  const [performanceData, setPerformanceData] = useState(null);  
 
-  // Fetch data from local storage and set state
+  
   useEffect(() => {
-    const userData = JSON.parse(localStorage.getItem('userDATA'));  // Get data stored in localStorage
+    const userData = JSON.parse(localStorage.getItem('userDATA'));  
 
-    if (userData && userData.student) {  // Ensure student data exists
-      setStudent(userData.student);  // Get the student object from local storage
-      setCourses(userData.student.enrollments);  // Set courses as enrollments from the student data
+    if (userData && userData.student) {  
+      setStudent(userData.student);  
+      setCourses(userData.student.enrollments);  
       
-      // Dummy performance data (you can update this with actual data if needed)
+      
       setPerformanceData({
         labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May'],
         datasets: [{
@@ -69,7 +69,6 @@ const StudentReport = () => {
       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: 3 }}>
         {student ? (
           <>
-            {/* Badge with Avatar */}
             <StyledBadge
               overlap="circular"
               anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
@@ -137,7 +136,6 @@ const StudentReport = () => {
 
         <Divider sx={{ margin: '20px 0' }} />
 
-        {/* Performance Overview Section */}
         <Typography variant="h5" sx={{ fontWeight: 'bold', marginBottom: 2, color: 'primary.main' }}>
           {performanceData ? 'Performance Overview' : <Skeleton width="50%" />}
         </Typography>

@@ -104,6 +104,7 @@ const StudentDashboard = () => {
                   <Typography variant="body2">Welcome</Typography>
                   <Typography variant="h6">{user.username}</Typography>
                   <Typography variant="body2" sx={{ color: "gray" }}>Student</Typography>
+                  <Typography variant="body2" sx={{ color: "gray" }}>ID: {user.student.student_id}</Typography>
                 </>
             
             </Box>

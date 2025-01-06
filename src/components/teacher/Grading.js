@@ -44,6 +44,7 @@ const Grading = () => {
 
     const formik = useFormik({
         initialValues: {
+            id: '',
             student_id: '',
             first_name: '',
             middle_name: '',
@@ -52,17 +53,27 @@ const Grading = () => {
             grade: '',
         },
         validationSchema: Yup.object({
+            id: Yup.string().required('ID is required'),
             student_id: Yup.string().required('Student ID is required'),
             course: Yup.string().required('Course is required'),
             grade: Yup.number().required('Grade is required').min(0, 'Grade must be at least 0').max(100, 'Grade must be at most 100'),
         }),
         onSubmit: async (values) => {
+            // Prepare the object to only submit the required fields
+            const dataToSubmit = {
+                course: values.course,
+                grade: values.grade,
+                student_id: values.id,
+            };
+    
             try {
                 if (gradeId) {
-                    const response = await axios.put(`https://shiloh-server.onrender.com/grades/${gradeId}`, values);
+                    // Update grade (PUT request)
+                    const response = await axios.put(`https://shiloh-server.onrender.com/grades/${gradeId}`, dataToSubmit);
                     console.log('Grade updated:', response.data);
                 } else {
-                    const response = await axios.post('https://shiloh-server.onrender.com/grades', values);
+                    // Create new grade (POST request)
+                    const response = await axios.post('https://shiloh-server.onrender.com/grades', dataToSubmit);
                     console.log('Grade created:', response.data);
                 }
                 fetchGrades();
@@ -85,6 +96,7 @@ const Grading = () => {
     const handleEdit = (grade) => {
         setGradeId(grade.id);
         formik.setValues({
+            id: grade.id,
             student_id: grade.student_id,
             course: grade.course,
             grade: grade.grade,
@@ -94,6 +106,7 @@ const Grading = () => {
 
     const handleOpenModal = (student) => {
         setSelectedStudent(student);
+        formik.setFieldValue('id', student.id);
         formik.setFieldValue('student_id', student.student_id);
         formik.setFieldValue('first_name', student.first_name || '');
         formik.setFieldValue('middle_name', student.middle_name || '');
@@ -169,6 +182,18 @@ const Grading = () => {
                         Grade {selectedStudent ? `${selectedStudent.first_name} ${selectedStudent.middle_name} ${selectedStudent.last_name}` : ''}
                     </Typography>
                     <form onSubmit={formik.handleSubmit}>
+                    <TextField
+                            fullWidth
+                            id="id"
+                            name="student_id"
+                            label="Student ID"
+                            value={formik.values.id}
+                            onChange={formik.handleChange}
+                            error={formik.touched.id && Boolean(formik.errors.id)}
+                            helperText={formik.touched.id && formik.errors.id}
+                            margin="normal"
+                            disabled
+                        />
                         <TextField
                             fullWidth
                             id="student_id"
