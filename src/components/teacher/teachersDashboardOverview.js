@@ -27,7 +27,7 @@ const TeacherDashboardOverview = () => {
     const fetchCourses = async () => {
       try {
         setLoading(true);  // Set loading to true when fetching starts
-        const response = await axios.get("https://shiloh-server.onrender.com/enrollments/courses"); // Replace with your actual API endpoint
+        const response = await axios.get("https://shiloh-server-2t51.onrender.com/enrollments/courses"); // Replace with your actual API endpoint
         // Ensure courses is always an array
         const coursesData = Array.isArray(response.data.courses) ? response.data.courses : [];
         setCourses(coursesData);  // Update the state with the fetched courses

@@ -41,7 +41,7 @@ const FileUpload = () => {
       formData.append('file', values.file);
 
       try {
-        const response = await axios.post('https://shiloh-server.onrender.com/users/upload', formData, {
+        const response = await axios.post('https://shiloh-server-2t51.onrender.com/users/upload', formData, {
           headers: {
             'Content-Type': 'multipart/form-data',
           },

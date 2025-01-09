@@ -28,7 +28,7 @@ const Header = () => {
   
     setIsLoading(true);
     try {
-      const response = await fetch(`https://shiloh-server.onrender.com/finances`);
+      const response = await fetch(`https://shiloh-server-2t51.onrender.com/finances`);
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }

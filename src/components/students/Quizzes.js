@@ -32,7 +32,7 @@ const QuizzesPage = () => {
     const fetchQuizzes = async () => {
       try {
         const token = localStorage.getItem("access_token");
-        const response = await fetch("https://shiloh-server.onrender.com/quizzes", {
+        const response = await fetch("https://shiloh-server-2t51.onrender.com/quizzes", {
           headers: {
             Authorization: `Bearer ${token}`,
           },

@@ -24,7 +24,7 @@ const Login = () => {
     onSubmit: async (values) => {
       setLoading(true);  // Set loading to true when submitting
       try {
-        const response = await axios.post(`https://shiloh-server.onrender.com/users/login`, values, {
+        const response = await axios.post(`https://shiloh-server-2t51.onrender.com/users/login`, values, {
           headers: {
             'Content-Type': 'application/json',
           },

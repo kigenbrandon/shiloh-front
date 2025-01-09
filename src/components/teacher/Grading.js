@@ -18,7 +18,7 @@ const Grading = () => {
 
     const fetchStudents = async () => {
         try {
-            const response = await axios.get('https://shiloh-server.onrender.com/students');
+            const response = await axios.get('https://shiloh-server-2t51.onrender.com/students');
             setStudents(response.data);
             console.log('Students:', response.data);
         } catch (error) {
@@ -28,7 +28,7 @@ const Grading = () => {
 
     const fetchGrades = async () => {
         try {
-            const response = await axios.get('https://shiloh-server.onrender.com/grades');
+            const response = await axios.get('https://shiloh-server-2t51.onrender.com/grades');
             setGrades(response.data);
         } catch (error) {
             console.error('Error fetching grades:', error);
@@ -69,11 +69,11 @@ const Grading = () => {
             try {
                 if (gradeId) {
                     // Update grade (PUT request)
-                    const response = await axios.put(`https://shiloh-server.onrender.com/grades/${gradeId}`, dataToSubmit);
+                    const response = await axios.put(`https://shiloh-server-2t51.onrender.com/grades/${gradeId}`, dataToSubmit);
                     console.log('Grade updated:', response.data);
                 } else {
                     // Create new grade (POST request)
-                    const response = await axios.post('https://shiloh-server.onrender.com/grades', dataToSubmit);
+                    const response = await axios.post('https://shiloh-server-2t51.onrender.com/grades', dataToSubmit);
                     console.log('Grade created:', response.data);
                 }
                 fetchGrades();
@@ -86,7 +86,7 @@ const Grading = () => {
 
     const handleDelete = async (id) => {
         try {
-            await axios.delete(`https://shiloh-server.onrender.com/grades/${id}`);
+            await axios.delete(`https://shiloh-server-2t51.onrender.com/grades/${id}`);
             fetchGrades();
         } catch (error) {
             console.error('Error deleting grade:', error);
