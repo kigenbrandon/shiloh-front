@@ -16,13 +16,7 @@ const Notification = () => {
     useEffect(() => {
         const fetchNotifications = async () => {
             try {
-                const storedData = JSON.parse(localStorage.getItem('userDATA') || 'null');
-                if (storedData?.demo) {
-                    setNotifications(getDemoUser('teacher').teacher.notifications);
-                    setLoading(false);
-                    return;
-                }
-                const response = await fetch('https://shiloh-server-2t51.onrender.com/communication/notifications');
+                const response = await fetch('https://shiloh-server.onrender.com/communication/notifications');
                 const data = await response.json();
                 setNotifications(data);
             } catch (error) {

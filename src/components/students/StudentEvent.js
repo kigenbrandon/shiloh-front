@@ -41,6 +41,7 @@ const EventsPage = () => {
 
     try {
       const response = await axios.post('https://shiloh-server-2t51.onrender.com/events/submit-event', newEvent);
+      const response = await axios.post('https://shiloh-server-2t51.onrender.com/events/submit-event', newEvent);
       setEvents((prevEvents) => [...prevEvents, response.data.event]);  // Add new event to the list
     } catch (error) {
       console.error('Error creating event:', error);
@@ -58,6 +59,7 @@ const EventsPage = () => {
 
     try {
       const response = await axios.put(`https://shiloh-server-2t51.onrender.com/events/${eventId}`, updatedEvent);
+      const response = await axios.put(`https://shiloh-server-2t51.onrender.com/events/${eventId}`, updatedEvent);
       setEvents((prevEvents) =>
         prevEvents.map((event) => (event.id === eventId ? response.data.event : event))
       );
@@ -68,6 +70,7 @@ const EventsPage = () => {
 
   const handleDeleteEvent = async (eventId) => {
     try {
+      await axios.delete(`https://shiloh-server-2t51.onrender.com/events/${eventId}`);
       await axios.delete(`https://shiloh-server-2t51.onrender.com/events/${eventId}`);
       setEvents((prevEvents) => prevEvents.filter((event) => event.id !== eventId));  // Remove event from list
     } catch (error) {

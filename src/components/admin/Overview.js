@@ -11,6 +11,7 @@ const initialUserData = getStoredUserData();
 
 const axiosInstance = axios.create({
   baseURL: "https://shiloh-server-2t51.onrender.com", // Replace with your API base URL
+  baseURL: "https://shiloh-server-2t51.onrender.com", // Replace with your API base URL
   headers: {
     Authorization: `Bearer ${initialUserData?.access_token}`,
   },
