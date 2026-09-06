@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Container, Box, Paper, Typography, Button, Divider, Avatar, Skeleton } from '@mui/material';
 import { styled } from '@mui/system';
+import { getDemoUser } from '../../demoData';
 
 // Styled Components for Customization
 const StyledCard = styled(Paper)({
@@ -96,10 +97,13 @@ const AssignmentsPage = () => {
 
   // Simulate loading state
   useEffect(() => {
-    setTimeout(() => {
-      setAssignments(dummyAssignments);
+    const storedData = JSON.parse(localStorage.getItem('userDATA') || 'null');
+    const demoAssignments = storedData?.demo ? getDemoUser('student').assignments : dummyAssignments;
+    const timer = setTimeout(() => {
+      setAssignments(demoAssignments);
       setLoading(false);
-    }, 1500); // Simulate a delay for loading the data
+    }, 450);
+    return () => clearTimeout(timer);
   }, []);
 
   if (loading) return (
@@ -156,6 +160,9 @@ const AssignmentsPage = () => {
                 </Typography>
                 <Typography variant="body2" align="center" color="text.secondary">
                   Subject: {assignment.subject}
+                </Typography>
+                <Typography variant="body2" align="center" color={assignment.status === 'Submitted' ? 'success.main' : 'warning.main'} sx={{ mt: 0.5 }}>
+                  {assignment.status} · {assignment.points} points
                 </Typography>
                 <StyledButton variant="contained">
                   View Details

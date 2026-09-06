@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Container, Typography, TextField, Button, MenuItem, Snackbar, Alert, Box, Paper, Skeleton } from '@mui/material';
 import { Formik, Field, Form } from 'formik';
 import * as Yup from 'yup';
+import { getDemoUser } from '../../demoData';
 
 const Notification = () => {
     const [notificationType, setNotificationType] = useState('');
@@ -15,6 +16,12 @@ const Notification = () => {
     useEffect(() => {
         const fetchNotifications = async () => {
             try {
+                const storedData = JSON.parse(localStorage.getItem('userDATA') || 'null');
+                if (storedData?.demo) {
+                    setNotifications(getDemoUser('teacher').teacher.notifications);
+                    setLoading(false);
+                    return;
+                }
                 const response = await fetch('https://shiloh-server-2t51.onrender.com/communication/notifications');
                 const data = await response.json();
                 setNotifications(data);

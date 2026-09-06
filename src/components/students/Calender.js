@@ -5,6 +5,7 @@ import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import CloseIcon from '@mui/icons-material/Close';
+import { getDemoUser } from '../../demoData';
 
 const SchoolCalendar = () => {
   const [events, setEvents] = useState([]);
@@ -35,6 +36,11 @@ const SchoolCalendar = () => {
 
   // Fetch events or use dummy data
   useEffect(() => {
+    const storedData = JSON.parse(localStorage.getItem('userDATA') || 'null');
+    if (storedData?.demo) {
+      setEvents(getDemoUser('student').calendarEvents);
+      return;
+    }
     // Transform dummy data to FullCalendar event format
     const transformedEvents = dummyEvents.map(event => ({
       id: event.id,

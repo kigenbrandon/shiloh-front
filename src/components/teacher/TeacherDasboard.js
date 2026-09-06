@@ -1,19 +1,29 @@
 import React, { useState } from 'react';
-import { Container, Box, Typography, Paper, Divider, Button, TextField, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Avatar, Drawer, IconButton } from '@mui/material';
-import TeacherDashboardOverview, { TeacherDash } from './teachersDashboardOverview';
+import { Container, Box, Typography, Paper, Divider, Button, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Avatar, Drawer, IconButton, Switch, FormControlLabel, Chip, LinearProgress } from '@mui/material';
+import { TeacherDash } from './teachersDashboardOverview';
 import { Dashboard as DashboardIcon, School as SchoolIcon, Assignment as AssignmentIcon, Star as StarIcon, Notifications as NotificationsIcon, Settings as SettingsIcon, ExitToApp as ExitToAppIcon, Menu, MenuOpen, CheckCircleOutline } from '@mui/icons-material';
-import { FaAward, FaHamburger } from 'react-icons/fa';
+import { FaAward } from 'react-icons/fa';
 import Quizzes from './Quizess';
 import { GrMenu } from 'react-icons/gr';
 import Courses from './Courses';
 import Notification from './Notification';
 import Grading from './Grading';
 import { MarkAttendance } from './Attendance';
+import { useNavigate } from 'react-router-dom';
+import { getDemoUser } from '../../demoData';
 
 const drawerWidth = 240;
 
+const TeacherStudents = () => {
+  const students = getDemoUser('teacher').teacher.students;
+  return <Container maxWidth="md" sx={{ py: 4 }}><Typography variant="h4" fontWeight={800}>Your students</Typography><Typography color="text.secondary" sx={{ mb: 3 }}>Track learner momentum across your courses.</Typography>{students.map((student) => <Paper key={student.id} sx={{ p: 2.5, mb: 1.5, border: '1px solid', borderColor: 'divider' }} elevation={0}><Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}><Avatar sx={{ bgcolor: 'primary.main' }}>{student.student_name[0]}</Avatar><Box sx={{ flex: 1 }}><Typography fontWeight={800}>{student.student_name}</Typography><Typography variant="body2" color="text.secondary">{student.course} · Last active {student.lastActive}</Typography><LinearProgress value={student.progress} variant="determinate" sx={{ mt: 1 }} /></Box><Chip label={`${student.progress}%`} color="primary" variant="outlined" /></Box></Paper>)}</Container>;
+};
+
+const TeacherSettings = () => <Container maxWidth="sm" sx={{ py: 4 }}><Typography variant="h4" fontWeight={800}>Settings</Typography><Typography color="text.secondary" sx={{ mb: 3 }}>Manage your teaching preferences.</Typography><Paper sx={{ p: 3, border: '1px solid', borderColor: 'divider' }} elevation={0}><FormControlLabel control={<Switch defaultChecked />} label="Email notifications" /><FormControlLabel control={<Switch defaultChecked />} label="Weekly class summary" /><Divider sx={{ my: 2 }} /><Typography fontWeight={800}>Availability</Typography><Typography color="text.secondary">Monday - Friday, 9:00 AM - 4:00 PM</Typography></Paper></Container>;
+
 const Sidebar = ({ currentComponent, setCurrentComponent }) => {
   const [open, setOpen] = useState(false);
+  const navigate = useNavigate();
 
   const user = JSON.parse(localStorage.getItem('user')) ;
   const handleDrawerToggle = () => {
@@ -21,6 +31,15 @@ const Sidebar = ({ currentComponent, setCurrentComponent }) => {
   };
   const handleLinkClick = (component) => {
     setCurrentComponent(component);
+    setOpen(false);
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem('access_token');
+    localStorage.removeItem('refresh_token');
+    localStorage.removeItem('user');
+    localStorage.removeItem('userDATA');
+    navigate('/login');
   };
 
   return (
@@ -46,10 +65,10 @@ const Sidebar = ({ currentComponent, setCurrentComponent }) => {
         <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column', mb: 3 }}>
           <Avatar sx={{ width: 60, height: 60, mb: 1 }} />
           <Typography variant="h6" sx={{ fontWeight: 'bold' }}>
-            {user.username}
+            {user?.username || 'Teacher'}
           </Typography>
           <Typography variant="body2" sx={{ color: '#B0B0B0' }}>
-            {user.subject}
+            {user?.subject || 'Computer Science'}
           </Typography>
         </Box>
 
@@ -84,7 +103,7 @@ const Sidebar = ({ currentComponent, setCurrentComponent }) => {
           </ListItem>
 
           <ListItem disablePadding>
-            <ListItemButton sx={{ color: 'white' }}>
+            <ListItemButton sx={{ color: 'white' }} onClick={()=>handleLinkClick(<TeacherStudents/>)}>
               <ListItemIcon sx={{ color: 'white' }}>
                 <StarIcon />
               </ListItemIcon>
@@ -120,7 +139,7 @@ const Sidebar = ({ currentComponent, setCurrentComponent }) => {
           </ListItem>
 
           <ListItem disablePadding>
-            <ListItemButton sx={{ color: 'white' }}>
+            <ListItemButton sx={{ color: 'white' }} onClick={()=>handleLinkClick(<TeacherSettings/>)}>
               <ListItemIcon sx={{ color: 'white' }}>
                 <SettingsIcon />
               </ListItemIcon>
@@ -131,7 +150,7 @@ const Sidebar = ({ currentComponent, setCurrentComponent }) => {
           <Divider sx={{ borderColor: '#3C4A5E' }} />
 
           <ListItem disablePadding>
-            <ListItemButton sx={{ color: 'white' }} >
+            <ListItemButton sx={{ color: 'white' }} onClick={handleLogout}>
               <ListItemIcon sx={{ color: 'white' }}>
                 <ExitToAppIcon />
               </ListItemIcon>

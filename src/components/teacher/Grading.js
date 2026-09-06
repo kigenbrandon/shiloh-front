@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
-import { Container, TextField, Button, Typography, Box, Skeleton, IconButton, Modal, Grid } from '@mui/material';
+import { Container, TextField, Button, Typography, Box, Skeleton, IconButton, Modal, Grid, Avatar } from '@mui/material';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow,  Paper } from '@mui/material';
 
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import axios from 'axios';
+import { getDemoUser } from '../../demoData';
+import { Assessment, CheckCircle, Search, TrendingUp } from '@mui/icons-material';
 
 const Grading = () => {
     const [students, setStudents] = useState([]);
@@ -15,9 +17,22 @@ const Grading = () => {
     const [gradeId, setGradeId] = useState(null);
     const [selectedStudent, setSelectedStudent] = useState(null);
     const [openModal, setOpenModal] = useState(false);
+    const [searchTerm, setSearchTerm] = useState('');
+
+    const demoStudents = getDemoUser('teacher').teacher.students.map((student) => ({
+        ...student,
+        first_name: student.student_name.split(' ')[0],
+        last_name: student.student_name.split(' ').slice(1).join(' '),
+        student_id: `SHL-${student.id}`,
+    }));
 
     const fetchStudents = async () => {
         try {
+            const storedData = JSON.parse(localStorage.getItem('userDATA') || 'null');
+            if (storedData?.demo) {
+                setStudents(demoStudents);
+                return;
+            }
             const response = await axios.get('https://shiloh-server-2t51.onrender.com/students');
             setStudents(response.data);
             console.log('Students:', response.data);
@@ -28,6 +43,12 @@ const Grading = () => {
 
     const fetchGrades = async () => {
         try {
+            const storedData = JSON.parse(localStorage.getItem('userDATA') || 'null');
+            if (storedData?.demo) {
+                setGrades(demoStudents.map((student, index) => ({ id: index + 1, student_id: student.id, course: student.course, grade: [87, 74, 92][index] })));
+                setLoading(false);
+                return;
+            }
             const response = await axios.get('https://shiloh-server-2t51.onrender.com/grades');
             setGrades(response.data);
         } catch (error) {
@@ -120,17 +141,16 @@ const Grading = () => {
         formik.resetForm();  // Reset the form
     };
 
+    const visibleStudents = students.filter((student) => `${student.first_name || ''} ${student.last_name || ''} ${student.student_id || ''}`.toLowerCase().includes(searchTerm.toLowerCase()));
+    const averageGrade = grades.length ? Math.round(grades.reduce((sum, grade) => sum + Number(grade.grade || 0), 0) / grades.length) : 0;
+
     return (
-        <Container maxWidth="sm">
-            <Box sx={{ mt: 4 }}>
-                <Typography variant="h4" component="h1" gutterBottom>
-                    Grade Student
-                </Typography>
+        <Container className="teacher-grading-page" maxWidth="lg">
+            <Box className="teacher-page-heading"><Box><Typography className="eyebrow">ASSESSMENT CENTER</Typography><Typography variant="h4" sx={{ mt: .5 }}>Student grading</Typography><Typography color="text.secondary" sx={{ mt: .75 }}>Give timely feedback and keep every learner&apos;s progress visible.</Typography></Box><Button variant="contained" startIcon={<Assessment />} onClick={() => setOpenModal(true)}>Add grade</Button></Box>
+            <Box className="grading-stat-grid"><Paper elevation={0}><Avatar><Assessment /></Avatar><Box><Typography variant="h5">{students.length}</Typography><Typography variant="body2" color="text.secondary">Learners in view</Typography></Box></Paper><Paper elevation={0}><Avatar><TrendingUp /></Avatar><Box><Typography variant="h5">{averageGrade}%</Typography><Typography variant="body2" color="text.secondary">Average grade</Typography></Box></Paper><Paper elevation={0}><Avatar><CheckCircle /></Avatar><Box><Typography variant="h5">{grades.length}</Typography><Typography variant="body2" color="text.secondary">Grades recorded</Typography></Box></Paper></Box>
 
                 <Box sx={{ mt: 4 }}>
-                    <Typography variant="h5" component="h2" gutterBottom>
-                        Students List
-                    </Typography>
+                    <Box className="grading-toolbar"><Typography variant="h6">Learners awaiting feedback</Typography><TextField size="small" placeholder="Search learners..." value={searchTerm} onChange={(event) => setSearchTerm(event.target.value)} InputProps={{ startAdornment: <Search color="action" sx={{ mr: 1 }} /> }} /></Box>
                     {loading ? (
                         <Skeleton variant="rectangular" width="100%" height={118} />
                     ) : (
@@ -145,7 +165,7 @@ const Grading = () => {
                                 </TableRow>
                                 </TableHead>
                                 <TableBody>
-                                {students.map((student) => (
+                                {visibleStudents.map((student) => (
                                     <TableRow key={student.id} sx={{ '&:nth-of-type(even)': { backgroundColor: '#fafafa' }, '&:hover': { backgroundColor: '#f1f1f1' } }}>
                                     <TableCell>{student.first_name || 'N/A'}</TableCell>
                                     <TableCell>{student.middle_name || 'N/A'}</TableCell>
@@ -173,7 +193,6 @@ const Grading = () => {
                             </Table>
                     )}
                 </Box>
-            </Box>
 
             {/* Grading Modal */}
             <Modal open={openModal} onClose={handleCloseModal}>

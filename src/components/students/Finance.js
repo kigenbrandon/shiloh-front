@@ -3,6 +3,7 @@ import { Container, Box, Typography, Paper, Divider, CircularProgress, Snackbar 
 import { Line } from 'react-chartjs-2';
 import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend } from 'chart.js';
 import { PayPalScriptProvider, PayPalButtons } from '@paypal/react-paypal-js';
+import { getDemoUser } from '../../demoData';
 
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 
@@ -58,6 +59,7 @@ const FinancialDashboard = () => {
   // Simulate fetching user data from localStorage
   useEffect(() => {
     const userData = JSON.parse(localStorage.getItem('user'));
+    const storedData = JSON.parse(localStorage.getItem('userDATA') || 'null');
     
     // Handle case if no user data is in localStorage
     if (!userData) {
@@ -71,12 +73,16 @@ const FinancialDashboard = () => {
     // Example of fetching student financial data
     // This can be replaced with an actual API call
     setTimeout(() => {
+      const payments = storedData?.demo ? getDemoUser('student').payments : null;
       setStudentInfo({
         name: userData.username || 'Unknown',
-        studentId: userData.studentId || '0',
-        balance: 1000,  // Example balance update
-        totalPaid: 200,
-        totalDue: 800,
+        studentId: storedData?.student?.student_id || userData.studentId || '0',
+        balance: payments?.balance || 1000,
+        totalPaid: payments?.totalPaid || 200,
+        totalDue: payments?.totalDue || 800,
+        nextDue: payments?.nextDue,
+        invoiceNumber: payments?.invoiceNumber,
+        history: payments?.history || [],
       });
       setLoading(false);
     }, 1000); // Simulate API call delay
@@ -110,6 +116,9 @@ const FinancialDashboard = () => {
         <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2, padding: 2 }}>
           <Typography variant="h4" gutterBottom color="secondary">
             Welcome, {studentInfo.name}
+          </Typography>
+          <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
+            Invoice {studentInfo.invoiceNumber || 'available in your account'} · Next payment due {studentInfo.nextDue || 'soon'}
           </Typography>
 
           <Box sx={{ display: 'flex', flexDirection: { xs: 'column', sm: 'row' }, gap: 2, width: '100%' }}>
@@ -152,6 +161,15 @@ const FinancialDashboard = () => {
               />
             </Box>
           </Box>
+          <Paper sx={{ p: 2 }}>
+            <Typography variant="h6" gutterBottom>Payment history</Typography>
+            {studentInfo.history?.length ? studentInfo.history.map((payment) => (
+              <Box key={payment.id} sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', py: 1.5, borderBottom: '1px solid', borderColor: 'divider' }}>
+                <Box><Typography fontWeight={700}>{payment.description}</Typography><Typography variant="body2" color="text.secondary">{new Date(payment.date).toLocaleDateString()}</Typography></Box>
+                <Typography fontWeight={800}>${payment.amount} · {payment.status}</Typography>
+              </Box>
+            )) : <Typography color="text.secondary">No payment history available.</Typography>}
+          </Paper>
         </Box>
       </Container>
 

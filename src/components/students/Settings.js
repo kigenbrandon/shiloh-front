@@ -1,5 +1,5 @@
 import React, { useState, useCallback } from 'react';
-import { TextField, Button, Box, Typography, Switch, Paper, Alert } from '@mui/material';
+import { TextField, Button, Box, Typography, Switch, Paper, Alert, Divider, FormControlLabel, Checkbox, Select, MenuItem } from '@mui/material';
 import { useTheme } from '../context/ThemeContext';
 import axios from 'axios';
 import { useDropzone } from 'react-dropzone';
@@ -27,6 +27,7 @@ const SettingsPage = () => {
 
   const [errorMessage, setErrorMessage] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
+  const [preferences, setPreferences] = useState({ emailNotifications: true, weeklyDigest: true, language: 'English' });
 
   const onDrop = useCallback((acceptedFiles) => {
     const file = acceptedFiles[0];
@@ -157,6 +158,16 @@ const SettingsPage = () => {
             </Form>
           )}
         </Formik>
+        <Divider sx={{ my: 3 }} />
+        <Typography variant="h6" sx={{ mb: 1 }}>Notification preferences</Typography>
+        <FormControlLabel control={<Checkbox checked={preferences.emailNotifications} onChange={(event) => setPreferences({ ...preferences, emailNotifications: event.target.checked })} />} label="Email notifications" />
+        <FormControlLabel control={<Checkbox checked={preferences.weeklyDigest} onChange={(event) => setPreferences({ ...preferences, weeklyDigest: event.target.checked })} />} label="Weekly learning summary" />
+        <Typography variant="h6" sx={{ mt: 2, mb: 1 }}>Language</Typography>
+        <Select size="small" value={preferences.language} onChange={(event) => setPreferences({ ...preferences, language: event.target.value })} fullWidth>
+          <MenuItem value="English">English</MenuItem>
+          <MenuItem value="French">French</MenuItem>
+          <MenuItem value="Spanish">Spanish</MenuItem>
+        </Select>
       <Box sx={{ padding: 4 }}>
         {/* Dark Mode Toggle */}
         <Box sx={{ marginBottom: 4, display: 'flex', alignItems: 'center' }}>

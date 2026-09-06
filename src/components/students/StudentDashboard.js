@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { Box, Drawer, Paper, Typography, Button, Divider, useMediaQuery, Skeleton, Avatar, IconButton } from "@mui/material";
+import React, { useState } from "react";
+import { Box, Drawer, Typography, Button, Divider, useMediaQuery, Avatar, IconButton } from "@mui/material";
 import { MdAssignment, MdEvent } from "react-icons/md";
 import { Dashboard as DashboardIcon, ExitToApp as ExitToAppIcon, Payment, Schedule } from "@mui/icons-material";
 import { CiSettings } from "react-icons/ci";
@@ -8,7 +8,7 @@ import { SlCalender } from "react-icons/sl";
 import { PiStudent } from "react-icons/pi";
 import { GrMenu } from 'react-icons/gr';
 import MenuOpen from '@mui/icons-material/MenuOpen';
-import StudentdashboardOverview, { renderCourses } from "./dashboardOverview";
+import StudentdashboardOverview from "./dashboardOverview";
 import SettingsPage from "./Settings";
 import QuizzesPage from "./Quizzes";
 import SchoolCalendar from "./Calender";
@@ -19,15 +19,17 @@ import StudentsPage from "./Students";
 import AssignmentsPage from "./Assignment";
 import ScheduleClass, { DisplayDummyData, Timetable } from "./TimeTable";
 import Courses from "./Courses";
+import { useAuth } from "../context/AuthContext";
+import { useNavigate } from "react-router-dom";
 
 const StudentDashboard = () => {
   const [open, setOpen] = useState(false);
   const isSmallScreen = useMediaQuery('(max-width:600px)');
-  const [loading, setLoading] = useState(true);
-  const user = JSON.parse(localStorage.getItem('userDATA'));
-  const [selectedSection, setSelectedSection] = useState('dashboard'); 
+  const user = JSON.parse(localStorage.getItem('userDATA') || '{}');
   const [currentComponent, setCurrentComponent] = useState(<StudentdashboardOverview/>);
   const drawerWidth = 250;
+  const { logout } = useAuth();
+  const navigate = useNavigate();
 
   const handleDrawerToggle = () => {
     setOpen(!open);
@@ -35,26 +37,33 @@ const StudentDashboard = () => {
 
 
   const getInitials = (name) => {
-    const nameArray = name.split(" ");
+    const nameArray = (name || "Learner").split(" ");
     return nameArray.length > 1
       ? nameArray[0][0] + nameArray[1][0]
       : nameArray[0][0];
   };
   const handleLinkClick = (component) => {
     setCurrentComponent(component);
+    if (isSmallScreen) setOpen(false);
+  };
+  const handleLogout = () => {
+    logout();
+    localStorage.removeItem('userDATA');
+    navigate('/login');
   };
 
  
   return (
     <Box sx={{ display: "flex", height: "100%" }}>
       <IconButton
+        aria-label={open ? "Close navigation" : "Open navigation"}
         onClick={handleDrawerToggle}
         sx={{
           position: 'fixed',
-          top: 60,
+          top: 78,
           left: open ? drawerWidth + 10 : 5,
-          backgroundColor: '#2E3B55',
-          color: 'pink',
+          backgroundColor: 'background.paper',
+          color: 'primary.main',
           zIndex: 6000,
           borderRadius: '5px',
         }}
@@ -71,9 +80,11 @@ const StudentDashboard = () => {
           "& .MuiDrawer-paper": {
             marginTop: 8,
             width: drawerWidth,
-            backgroundColor: "#424242",
+            backgroundColor: "#202338",
             color: "white",
             height: "100%",
+            borderRight: 0,
+            padding: "12px 10px",
           },
         }}
         anchor="left"
@@ -83,11 +94,9 @@ const StudentDashboard = () => {
           keepMounted: true,
         }}
       >
-        <Box sx={{ padding: 4 }}>
+        <Box sx={{ padding: 3 }}>
           <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
             {user.profileImage ? (
-              <Skeleton variant="circular" width={50} height={50} />
-            ) : user.profileImage ? (
               <img
                 src={user.profileImage}
                 alt="Profile"
@@ -101,10 +110,10 @@ const StudentDashboard = () => {
             <Box>
               
                 <>
-                  <Typography variant="body2">Welcome</Typography>
+                  <Typography variant="overline" sx={{ color: "rgba(255,255,255,.6)", letterSpacing: 1.2 }}>LEARNING SPACE</Typography>
                   <Typography variant="h6">{user.username}</Typography>
-                  <Typography variant="body2" sx={{ color: "gray" }}>Student</Typography>
-                  <Typography variant="body2" sx={{ color: "gray" }}>ID: {user.student.student_id}</Typography>
+                  <Typography variant="body2" sx={{ color: "rgba(255,255,255,.6)" }}>Student</Typography>
+                  <Typography variant="caption" sx={{ color: "rgba(255,255,255,.45)" }}>ID: {user.student?.student_id || "--"}</Typography>
                 </>
             
             </Box>
@@ -115,7 +124,7 @@ const StudentDashboard = () => {
           {/* Side menu buttons */}
           <Button
             fullWidth
-            sx={{ color: "white", textAlign: "left", padding: 1 }}
+            sx={{ color: "rgba(255,255,255,.78)", textAlign: "left", padding: 1.25, justifyContent: "flex-start", borderRadius: 2, '&:hover': { bgcolor: 'rgba(255,255,255,.1)', color: 'white' } }}
             startIcon={<DashboardIcon />}
             onClick={ ()=>handleLinkClick(<StudentdashboardOverview/>)}
           >
@@ -123,7 +132,7 @@ const StudentDashboard = () => {
           </Button>
           <Button
             fullWidth
-            sx={{ color: "white", textAlign: "left", padding: 1 }}
+            sx={{ color: "rgba(255,255,255,.78)", textAlign: "left", padding: 1.25, justifyContent: "flex-start", borderRadius: 2, '&:hover': { bgcolor: 'rgba(255,255,255,.1)', color: 'white' } }}
             startIcon={<MdAssignment />}
             onClick={ ()=>handleLinkClick(<Courses/>)}
           >
@@ -131,7 +140,7 @@ const StudentDashboard = () => {
           </Button>
           <Button
             fullWidth
-            sx={{ color: "white", textAlign: "left", padding: 1 }}
+            sx={{ color: "rgba(255,255,255,.78)", textAlign: "left", padding: 1.25, justifyContent: "flex-start", borderRadius: 2, '&:hover': { bgcolor: 'rgba(255,255,255,.1)', color: 'white' } }}
             startIcon={<MdAssignment />}
             onClick={() => handleLinkClick(<QuizzesPage/>)}
           >
@@ -139,7 +148,7 @@ const StudentDashboard = () => {
           </Button>
           <Button
             fullWidth
-            sx={{ color: "white", textAlign: "left", padding: 1 }}
+            sx={{ color: "rgba(255,255,255,.78)", textAlign: "left", padding: 1.25, justifyContent: "flex-start", borderRadius: 2, '&:hover': { bgcolor: 'rgba(255,255,255,.1)', color: 'white' } }}
             startIcon={<MdAssignment />}
             onClick={() => handleLinkClick(<AssignmentsPage/>)}
           >
@@ -147,7 +156,7 @@ const StudentDashboard = () => {
           </Button>
           <Button
             fullWidth
-            sx={{ color: "white", textAlign: "left", padding: 1 }}
+            sx={{ color: "rgba(255,255,255,.78)", textAlign: "left", padding: 1.25, justifyContent: "flex-start", borderRadius: 2, '&:hover': { bgcolor: 'rgba(255,255,255,.1)', color: 'white' } }}
             startIcon={<PiStudent />}
             onClick={() => handleLinkClick(<StudentsPage/>)}
           >
@@ -155,7 +164,7 @@ const StudentDashboard = () => {
           </Button>
           <Button
             fullWidth
-            sx={{ color: "white", textAlign: "left", padding: 1 }}
+            sx={{ color: "rgba(255,255,255,.78)", textAlign: "left", padding: 1.25, justifyContent: "flex-start", borderRadius: 2, '&:hover': { bgcolor: 'rgba(255,255,255,.1)', color: 'white' } }}
             startIcon={<HiOutlineDocumentReport />}
             onClick={() => handleLinkClick(<StudentReport/>)}
             >
@@ -163,7 +172,7 @@ const StudentDashboard = () => {
           </Button>
           <Button
             fullWidth
-            sx={{ color: "white", textAlign: "left", padding: 1 }}
+            sx={{ color: "rgba(255,255,255,.78)", textAlign: "left", padding: 1.25, justifyContent: "flex-start", borderRadius: 2, '&:hover': { bgcolor: 'rgba(255,255,255,.1)', color: 'white' } }}
             startIcon={<SlCalender />}
             onClick={() => handleLinkClick(<SchoolCalendar/>)}
           >
@@ -171,7 +180,7 @@ const StudentDashboard = () => {
           </Button>
           <Button
             fullWidth
-            sx={{ color: "white", textAlign: "left", padding: 1 }}
+            sx={{ color: "rgba(255,255,255,.78)", textAlign: "left", padding: 1.25, justifyContent: "flex-start", borderRadius: 2, '&:hover': { bgcolor: 'rgba(255,255,255,.1)', color: 'white' } }}
             startIcon={<Schedule/>}
             onClick={() => handleLinkClick(<Timetable/>)}
           >
@@ -179,7 +188,7 @@ const StudentDashboard = () => {
           </Button>
           <Button
             fullWidth
-            sx={{ color: "white", textAlign: "left", padding: 1 }}
+            sx={{ color: "rgba(255,255,255,.78)", textAlign: "left", padding: 1.25, justifyContent: "flex-start", borderRadius: 2, '&:hover': { bgcolor: 'rgba(255,255,255,.1)', color: 'white' } }}
             startIcon={<MdEvent />}
             onClick={() => handleLinkClick(<EventsPage/>)}
           >
@@ -187,7 +196,7 @@ const StudentDashboard = () => {
           </Button>
           <Button
             fullWidth
-            sx={{ color: "white", textAlign: "left", padding: 1 }}
+            sx={{ color: "rgba(255,255,255,.78)", textAlign: "left", padding: 1.25, justifyContent: "flex-start", borderRadius: 2, '&:hover': { bgcolor: 'rgba(255,255,255,.1)', color: 'white' } }}
             startIcon={<Payment/>}
             onClick={() => handleLinkClick(<FinancePage/>)}
           >
@@ -196,7 +205,7 @@ const StudentDashboard = () => {
           <Divider />
           <Button
             fullWidth
-            sx={{ color: "white", textAlign: "left", padding: 1 }}
+            sx={{ color: "rgba(255,255,255,.78)", textAlign: "left", padding: 1.25, justifyContent: "flex-start", borderRadius: 2, '&:hover': { bgcolor: 'rgba(255,255,255,.1)', color: 'white' } }}
             startIcon={<CiSettings />}
             onClick={() => handleLinkClick(<SettingsPage/>)}
           >
@@ -206,17 +215,14 @@ const StudentDashboard = () => {
             fullWidth
             sx={{ color: "white", textAlign: "left", padding: 1 }}
             startIcon={<ExitToAppIcon />}
-            onClick={() => setSelectedSection('logout')}
+            onClick={handleLogout}
           >
             Logout
           </Button> 
         </Box>
       </Drawer>
 
-      <Box sx={{ flexGrow: 1, padding: 4, color: "#fff" }}>
-        <Paper sx={{ padding: 3, boxShadow: 3}}>
-          <Typography variant="h4" align="center">WELCOME TO SHILOH</Typography>
-        </Paper>
+      <Box className="student-content">
         {currentComponent}
       </Box>
     </Box>

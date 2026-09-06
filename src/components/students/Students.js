@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Container, Box, Paper, Typography, Button, Avatar, Divider, TextField, Autocomplete, Skeleton } from '@mui/material';
 import { styled } from '@mui/system';
+import { getDemoUser } from '../../demoData';
 
 // Styled Components for Customization
 const StyledAutocomplete = styled(Autocomplete)({
@@ -127,6 +128,12 @@ const StudentsPage = () => {
 
   // Fetch students from the API when the component mounts
   useEffect(() => {
+    const storedData = JSON.parse(localStorage.getItem('userDATA') || 'null');
+    if (storedData?.demo) {
+      setStudents(getDemoUser('student').classmates);
+      setLoading(false);
+      return;
+    }
     fetch('https://shiloh-server-2t51.onrender.com/users')
       .then((response) => response.json())
       .then((data) => {

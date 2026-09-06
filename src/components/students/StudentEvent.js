@@ -3,6 +3,7 @@ import axios from 'axios';  // Importing axios for API calls
 import { Box, Container, Typography, Paper, Card, CardContent, CardHeader, Divider, Skeleton, Button } from '@mui/material';
 import { ExpandMore as ExpandMoreIcon } from '@mui/icons-material';
 import { Accordion, AccordionSummary, AccordionDetails } from '@mui/material';
+import { getDemoUser } from '../../demoData';
 
 const EventsPage = () => {
   const [events, setEvents] = useState(null);  // Initialize events state as null
@@ -12,12 +13,18 @@ const EventsPage = () => {
   useEffect(() => {
     const fetchEvents = async () => {
       try {
+        const storedData = JSON.parse(localStorage.getItem('userDATA') || 'null');
+        if (storedData?.demo) {
+          setEvents(getDemoUser('student').events);
+          setLoading(false);
+          return;
+        }
         const response = await axios.get('https://shiloh-server-2t51.onrender.com/events');  // Replace with actual API endpoint
         setEvents(response.data);  // Update the state with fetched events
         setLoading(false);  // Set loading to false once data is fetched
       } catch (error) {
         console.error('Error fetching events:', error);
-        setLoading(false);  // Set loading to false even on error
+        setEvents([]);
       }
     };
     fetchEvents();

@@ -5,6 +5,7 @@ import Header from './Header';
 import SearchBar from '../Searchbar';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { getDemoUser } from '../../demoData';
 
 const TransactionList = () => {
   const [transactions, setTransactions] = useState([]);
@@ -43,6 +44,11 @@ const TransactionList = () => {
     setLoading(true);
     setTransactions([]); // Ensure transactions is an array before fetching
     try {
+      const storedData = JSON.parse(localStorage.getItem('userDATA') || 'null');
+      if (storedData?.demo) {
+        setTransactions(getDemoUser('admin').transactions);
+        return;
+      }
       let token = localStorage.getItem('access_token');
       console.log("Token before fetch:", token); // Debugging statement
 
@@ -120,21 +126,25 @@ const TransactionList = () => {
           <Table>
             <TableHead>
               <TableRow>
-                <TableCell>Transaction Type</TableCell>
+                <TableCell>Reference</TableCell>
+                <TableCell>Description</TableCell>
                 <TableCell>Amount</TableCell>
+                <TableCell>Status</TableCell>
                 <TableCell>Date</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
               {currentTransactions.length === 0 ? (
                 <TableRow>
-                  <TableCell colSpan={3}>No transactions available</TableCell>
+                  <TableCell colSpan={5}>No transactions available</TableCell>
                 </TableRow>
               ) : (
                 currentTransactions.map((t) => (
                   <TableRow key={t.id}>
-                    <TableCell>{t.transaction_type}</TableCell>
+                    <TableCell>{t.id}</TableCell>
+                    <TableCell>{t.description || t.transaction_type}</TableCell>
                     <TableCell>Ksh {t.amount}</TableCell>
+                    <TableCell>{t.status || 'Completed'}</TableCell>
                     <TableCell>{t.date}</TableCell>
                   </TableRow>
                 ))

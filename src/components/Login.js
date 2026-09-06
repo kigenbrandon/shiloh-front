@@ -2,15 +2,23 @@ import React, { useState } from 'react';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { useNavigate } from 'react-router-dom';
-import { TextField, Button, Typography, Box, Alert, CircularProgress } from '@mui/material';
+import { TextField, Button, Typography, Box, Alert, CircularProgress, Divider, Stack } from '@mui/material';
 import axios from 'axios';
 import { useAuth } from './context/AuthContext.js';
+import { getDemoUser } from '../demoData';
 
 const Login = () => {
   const [errorMessage, setErrorMessage] = useState(null);
   const [loading, setLoading] = useState(false);  // State for loading
   const navigate = useNavigate();
   const { login } = useAuth();
+
+  const handleDemoLogin = (role) => {
+    const demoUser = getDemoUser(role);
+    localStorage.setItem('userDATA', JSON.stringify(demoUser));
+    login(demoUser.access_token, demoUser.refresh_token, demoUser);
+    navigate(`/${role}`);
+  };
   
   const formik = useFormik({
     initialValues: {
@@ -57,26 +65,17 @@ const Login = () => {
   });
 
   return (
-    <Box
-      display="flex"
-      justifyContent="center"
-      alignItems="center"
-      minHeight="100vh"
-    >
+    <Box className="auth-page">
       <Box
         component="form"
         onSubmit={formik.handleSubmit}
-        width="100%"
-        maxWidth="400px"
-        p={4}
-        borderRadius={2}
-        boxShadow={3}
+        className="auth-card"
       >
+        <Typography className="eyebrow">WELCOME BACK</Typography>
         <Typography 
           variant="h4" 
-          align="center" 
           gutterBottom
-          color="primary" // Use the primary color from the theme
+          color="primary"
         >
           Login
         </Typography>
@@ -120,14 +119,23 @@ const Login = () => {
           color="primary"
           type="submit"
           sx={{ mt: 2 }}
-          disabled={loading}  // Disable the button if loading is true
+          disabled={loading}
         >
           {loading ? (
-            <CircularProgress size={24} color="inherit" />  // Show spinner if loading
+            <CircularProgress size={24} color="inherit" />
           ) : (
             'Login'
           )}
         </Button>
+        <Divider sx={{ my: 3 }}>or</Divider>
+        <Stack spacing={1.25}>
+          <Button fullWidth variant="outlined" color="secondary" type="button" onClick={() => handleDemoLogin('student')}>Try student demo</Button>
+          <Button fullWidth variant="outlined" color="primary" type="button" onClick={() => handleDemoLogin('teacher')}>Try teacher demo</Button>
+          <Button fullWidth variant="outlined" type="button" onClick={() => handleDemoLogin('admin')}>Try admin demo</Button>
+        </Stack>
+        <Typography variant="caption" color="text.secondary" display="block" textAlign="center" sx={{ mt: 1.5 }}>
+          Uses sample data locally. No account or API request required.
+        </Typography>
       </Box>
     </Box>
   );

@@ -16,6 +16,7 @@ import {
   CardActions,
   Paper,
 } from "@mui/material";
+import { getDemoUser } from "../../demoData";
 
 const QuizzesPage = () => {
   const [quizzes, setQuizzes] = useState([]);
@@ -31,6 +32,12 @@ const QuizzesPage = () => {
   useEffect(() => {
     const fetchQuizzes = async () => {
       try {
+        const storedData = JSON.parse(localStorage.getItem("userDATA") || "null");
+        if (storedData?.demo) {
+          setQuizzes(getDemoUser("student").quizzes);
+          setLoading(false);
+          return;
+        }
         const token = localStorage.getItem("access_token");
         const response = await fetch("https://shiloh-server-2t51.onrender.com/quizzes", {
           headers: {
@@ -45,7 +52,7 @@ const QuizzesPage = () => {
         setLoading(false);
       } catch (error) {
         console.error("Error fetching quizzes:", error);
-        setLoading(true);
+        setLoading(false);
       }
     };
 

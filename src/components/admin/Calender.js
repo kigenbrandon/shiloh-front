@@ -5,6 +5,12 @@ import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import CloseIcon from '@mui/icons-material/Close';
+import { getDemoUser } from '../../demoData';
+
+const dummyEvents = [
+  { id: 1, class_name: 'Math 101', room_number: 'A1', start_time: '2024-01-15T08:00:00', end_time: '2024-01-15T09:00:00' },
+  { id: 2, class_name: 'History 202', room_number: 'B2', start_time: '2024-12-15T10:00:00', end_time: '2024-12-15T12:00:00' },
+];
 
 const SchoolCalendar = () => {
   const [events, setEvents] = useState([]);
@@ -15,26 +21,13 @@ const SchoolCalendar = () => {
   const [startTime, setStartTime] = useState('');
   const [endTime, setEndTime] = useState('');
 
-  // Dummy event data
-  const dummyEvents = [
-    {
-      id: 1,
-      class_name: 'Math 101',
-      room_number: 'A1',
-      start_time: '2024-01-15T08:00:00',
-      end_time: '2024-01-15T09:00:00',
-    },
-    {
-      id: 2,
-      class_name: 'History 202',
-      room_number: 'B2',
-      start_time: '2024-12-15T10:00:00',
-      end_time: '2024-12-15T12:00:00',
-    },
-  ];
-
   // Fetch events or use dummy data
   useEffect(() => {
+    const storedData = JSON.parse(localStorage.getItem('userDATA') || 'null');
+    if (storedData?.demo) {
+      setEvents(getDemoUser('student').calendarEvents.map((event) => ({ ...event, title: `${event.title} · ${event.location}` })));
+      return;
+    }
     // Transform dummy data to FullCalendar event format
     const transformedEvents = dummyEvents.map(event => ({
       id: event.id,

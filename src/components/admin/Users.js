@@ -18,6 +18,7 @@ import { Edit as EditIcon, Delete as DeleteIcon } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 import { axiosInstance } from "./Overview";
 import SearchBar from "../Searchbar";
+import { getDemoUser } from "../../demoData";
 
 const Users = () => {
   const [users, setUsers] = useState([]);
@@ -38,7 +39,9 @@ const Users = () => {
     if (!userData || userData.role !== "admin") {
       navigate("/home");
     } else {
-      fetchUsers();
+      const demoData = getDemoUser("admin");
+      if (userData.demo) setUsers([...demoData.students, ...demoData.teachers]);
+      else fetchUsers();
     }
   }, [userData, navigate]);
 

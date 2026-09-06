@@ -61,25 +61,11 @@ const Signup = () => {
   });
 
   return (
-    <Box
-      sx={{
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        minHeight: '100vh',
-        backgroundColor: '#f0f4f8',
-        padding: 2,
-      }}
-    >
+    <Box className="auth-page">
       <Paper
-        sx={{
-          padding: 4,
-          width: '100%',
-          maxWidth: 480,
-          borderRadius: 2,
-          boxShadow: 3,
-        }}
+        className="auth-card"
       >
+        <Typography className="eyebrow">START YOUR PATH</Typography>
         <Typography variant="h5" align="center" sx={{ fontWeight: 'bold' }}>
           Sign Up
         </Typography>
