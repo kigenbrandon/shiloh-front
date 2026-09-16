@@ -91,11 +91,9 @@ const Grading = () => {
                 if (gradeId) {
                     // Update grade (PUT request)
                     const response = await axios.put(`https://shiloh-server-2t51.onrender.com/grades/${gradeId}`, dataToSubmit);
-                    const response = await axios.put(`https://shiloh-server-2t51.onrender.com/grades/${gradeId}`, dataToSubmit);
                     console.log('Grade updated:', response.data);
                 } else {
                     // Create new grade (POST request)
-                    const response = await axios.post('https://shiloh-server-2t51.onrender.com/grades', dataToSubmit);
                     const response = await axios.post('https://shiloh-server-2t51.onrender.com/grades', dataToSubmit);
                     console.log('Grade created:', response.data);
                 }

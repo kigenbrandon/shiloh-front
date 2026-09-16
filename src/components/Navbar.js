@@ -31,11 +31,11 @@ const Navbar = () => {
 
   const publicMenuItems = [
     { label: 'Explore', path: '/' },
-    { label: 'About learning', path: '/home' },
     { label: 'Sign up', path: '/signup' },
   ];
   const roleMenuItems = {
     student: [
+      { label: 'About learning', path: '/home' },
       { label: 'Dashboard', path: '/student' },
       { label: 'Enrollment', path: '/enrollment' },
     ],
@@ -49,7 +49,7 @@ const Navbar = () => {
     <AppBar position="sticky" elevation={0} sx={{ backgroundColor: 'background.paper', color: 'text.primary', borderBottom: '1px solid', borderColor: 'divider', zIndex: 1333, width: '100%', display: 'flex' }}>
       <Toolbar sx={{ padding: '0 clamp(16px, 4vw, 40px)', minHeight: 68 }}>
         <Box sx={{ display: 'flex', alignItems: 'center', flexGrow: 1, color: '#fff' }}>
-          <Typography variant="h6" sx={{ flexGrow: 1, fontWeight: 800, letterSpacing: '-.4px' }}>
+          <Typography variant="h6" sx={{ flexGrow: 1, fontWeight: 800, letterSpacing: '-.4px', color: "Highlight"}}>
             Shiloh <Box component="span" sx={{ color: 'primary.main' }}>College</Box>
           </Typography>
         </Box>

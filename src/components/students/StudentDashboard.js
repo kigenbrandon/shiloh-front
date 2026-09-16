@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Box, Drawer, Typography, Button, Divider, useMediaQuery, Avatar, IconButton } from "@mui/material";
 import { MdAssignment, MdEvent } from "react-icons/md";
-import { Dashboard as DashboardIcon, ExitToApp as ExitToAppIcon, Payment, Schedule } from "@mui/icons-material";
+import { Dashboard as DashboardIcon, ExitToApp as ExitToAppIcon, Payment, Schedule, Book } from "@mui/icons-material";
 import { CiSettings } from "react-icons/ci";
 import { HiOutlineDocumentReport } from "react-icons/hi";
 import { SlCalender } from "react-icons/sl";
@@ -17,10 +17,11 @@ import EventsPage from "./StudentEvent";
 import FinancePage from "./Finance";
 import StudentsPage from "./Students";
 import AssignmentsPage from "./Assignment";
-import ScheduleClass, { DisplayDummyData, Timetable } from "./TimeTable";
+import ScheduleClass, { DisplayDummyData } from "./TimeTable";
 import Courses from "./Courses";
 import { useAuth } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
+import Books from './Books'
 
 const StudentDashboard = () => {
   const [open, setOpen] = useState(false);
@@ -182,7 +183,7 @@ const StudentDashboard = () => {
             fullWidth
             sx={{ color: "rgba(255,255,255,.78)", textAlign: "left", padding: 1.25, justifyContent: "flex-start", borderRadius: 2, '&:hover': { bgcolor: 'rgba(255,255,255,.1)', color: 'white' } }}
             startIcon={<Schedule/>}
-            onClick={() => handleLinkClick(<Timetable/>)}
+            onClick={() => handleLinkClick(<ScheduleClass/>)}
           >
             Timetable
           </Button>
@@ -210,6 +211,14 @@ const StudentDashboard = () => {
             onClick={() => handleLinkClick(<SettingsPage/>)}
           >
             Settings
+          </Button>
+          <Button
+            fullWidth
+            sx={{ color: "rgba(255,255,255,.78)", textAlign: "left", padding: 1.25, justifyContent: "flex-start", borderRadius: 2, '&:hover': { bgcolor: 'rgba(255,255,255,.1)', color: 'white' } }}
+            startIcon={<Book />}
+            onClick={() => handleLinkClick(<Books/>)}
+          >
+            Books
           </Button>
           <Button
             fullWidth

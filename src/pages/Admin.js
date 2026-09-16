@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import {
   Box,
   Drawer,
-  Paper,
   Typography,
   Button,
   Divider,
@@ -16,6 +15,8 @@ import {
   MonetizationOn as MonetizationOnIcon,
   Notifications as NotificationsIcon,
   VerifiedUser,
+  Book,
+  Person,
 } from "@mui/icons-material";
 import TransactionList from "../components/admin/TransactionList";
 import Header from "../components/admin/Header";
@@ -26,6 +27,9 @@ import FinanceOverview from "../components/admin/FinanceOverview";
 import SchoolCalendar from "../components/admin/Calender";
 import Notification from "../components/admin/Notification";
 import Dashboard from "../components/admin/Overview";
+import Books from "../components/admin/Books";
+import Profile from "../components/admin/Profile";
+import Messages from "../components/admin/Messages";
 
 const Admin = () => {
   const [drawerOpen, setDrawerOpen] = useState(false);
@@ -149,6 +153,31 @@ const Admin = () => {
             >
               Notifications
             </Button>
+            <Button
+              fullWidth
+              sx={{ color: "white", textAlign: "left", padding: 1 }}
+              startIcon={<Book />}
+              onClick={() => handleLinkClick(<Books />)}
+            >
+              Books
+            </Button>
+            <Button
+              fullWidth
+              sx={{ color: "white", textAlign: "left", padding: 1 }}
+              startIcon={<Person />}
+              onClick={() => handleLinkClick(<Profile />)}
+            >
+              Profile
+            </Button>
+            <Button
+              fullWidth
+              sx={{ color: "white", textAlign: "left", padding: 1 }}
+              startIcon={<Person />}
+              onClick={() => handleLinkClick(<Messages />)}
+            >
+              Messages
+            </Button>            
+
             <Button
               fullWidth
               sx={{ color: "white", textAlign: "left", padding: 1 }}

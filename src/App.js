@@ -1,19 +1,23 @@
-import React from 'react';
-import { Route, Routes } from 'react-router-dom';
-import Navbar from './components/Navbar';
-import Home from './pages/Home';
-import Signup from './components/Signup';
-import Login from './components/Login';
-import Admin from './pages/Admin';
-import StudentDashboard from './components/students/StudentDashboard';
-import { StudentRegistration } from './components/students/StudentRegistration';
-import Enrollment from './pages/enrollment/Enrollment';
-import LandingPage from './components/Landing';
-import { ProtectedRoute } from './components/context/AuthContext';
-import { ThemeProvider as MuiThemeProvider, createTheme, CssBaseline } from '@mui/material';
-import { ThemeProvider, useTheme } from './components/context/ThemeContext';
-import Teacher from './components/teacher';
-import './index.css';
+import React from "react";
+import { Route, Routes } from "react-router-dom";
+import Navbar from "./components/Navbar";
+import Home from "./pages/Home";
+import Signup from "./components/Signup";
+import Login from "./components/Login";
+import Admin from "./pages/Admin";
+import StudentDashboard from "./components/students/StudentDashboard";
+import { StudentRegistration } from "./components/students/StudentRegistration";
+import Enrollment from "./pages/enrollment/Enrollment";
+import LandingPage from "./components/Landing";
+import { ProtectedRoute } from "./components/context/AuthContext";
+import {
+  ThemeProvider as MuiThemeProvider,
+  createTheme,
+  CssBaseline,
+} from "@mui/material";
+import { useTheme } from "./components/context/ThemeContext";
+import Teacher from "./components/teacher";
+import "./index.css";
 
 // require('dotenv').config()
 
@@ -28,34 +32,34 @@ function App() {
       h4: { fontFamily: '"Manrope", "DM Sans", sans-serif', fontWeight: 800 },
       h5: { fontFamily: '"Manrope", "DM Sans", sans-serif', fontWeight: 800 },
       h6: { fontFamily: '"Manrope", "DM Sans", sans-serif', fontWeight: 800 },
-      button: { textTransform: 'none', fontWeight: 700 },
+      button: { textTransform: "none", fontWeight: 700 },
     },
     palette: {
-      mode: darkMode ? 'dark' : 'light', 
+      mode: darkMode ? "dark" : "light",
       primary: {
-        main: '#5146e5',
+        main: "#5146e5",
       },
       secondary: {
-        main: '#f26b5e',
+        main: "#f26b5e",
       },
       success: {
-        main: '#4caf50',
+        main: "#4caf50",
       },
       info: {
-        main: '#03a9f4',
+        main: "#03a9f4",
       },
       warning: {
-        main: '#e7a33e',
+        main: "#e7a33e",
       },
       background: {
-        default: darkMode ? '#111426' : '#f7f8fc',
-        paper: darkMode ? '#191d32' : '#ffffff',
+        default: darkMode ? "#111426" : "#f7f8fc",
+        paper: darkMode ? "#191d32" : "#ffffff",
       },
     },
     shape: { borderRadius: 16 },
     components: {
       MuiButton: { defaultProps: { disableElevation: true } },
-      MuiPaper: { styleOverrides: { root: { backgroundImage: 'none' } } },
+      MuiPaper: { styleOverrides: { root: { backgroundImage: "none" } } },
     },
   });
 
@@ -65,11 +69,32 @@ function App() {
       <Navbar />
       <Routes>
         <Route path="/" element={<LandingPage />} />
-        <Route path="/home" element={<Home />} />
+        <Route
+          path="/home"
+          element={
+            <ProtectedRoute requiredRole="student">
+              <Home />
+            </ProtectedRoute>
+          }
+        />
         <Route path="/signup" element={<Signup />} />
         <Route path="/login" element={<Login />} />
-        <Route path="/enrollment" element={<Enrollment />}/>
-        <Route path="/teacher" element={<Teacher/>}/>
+        <Route
+          path="/enrollment"
+          element={
+            <ProtectedRoute requiredRole="student">
+              <Enrollment />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/teacher"
+          element={
+            <ProtectedRoute requiredRole="teacher">
+              <Teacher />
+            </ProtectedRoute>
+          }
+        />
         <Route path="/student/registration" element={<StudentRegistration />} />
         <Route
           path="/admin"

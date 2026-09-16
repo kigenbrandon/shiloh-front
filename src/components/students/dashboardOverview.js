@@ -1,9 +1,11 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { Box, Paper, Typography, Button, Skeleton, Avatar, LinearProgress, Chip, Stack } from "@mui/material";
 import { ArrowForward, CheckCircle, EmojiEvents, LocalFireDepartment, MenuBook, PlayArrow, Schedule, Star, AssignmentTurnedIn, Quiz, Celebration } from "@mui/icons-material";
+import { useNavigate } from "react-router-dom";
 
 const StudentdashboardOverview = () => {
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
 
   const data = useMemo(() => {
     try {
@@ -29,6 +31,28 @@ const StudentdashboardOverview = () => {
     { icon: <Celebration />, title: "Unlocked the Consistent Learner badge", meta: "3 days ago · 7 day streak", tone: "#e7a33e" },
   ];
 
+  const handleDashboardAction = (section) => {
+    navigate('/student');
+
+    const sectionIdMap = {
+      continue: 'continue-learning',
+      momentum: 'momentum-panel',
+      recommendations: 'recommendations-panel',
+      history: 'activity-panel',
+      goal: 'goal-panel',
+    };
+
+    const targetId = sectionIdMap[section];
+    if (!targetId) return;
+
+    setTimeout(() => {
+      const element = document.getElementById(targetId);
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }, 50);
+  };
+
   // Simulate a loading state
   useEffect(() => {
     const timer = setTimeout(() => setLoading(false), 450);
@@ -51,7 +75,7 @@ const StudentdashboardOverview = () => {
           <Chip label="KEEP GOING" size="small" sx={{ bgcolor: "rgba(255,255,255,.16)", color: "white", fontWeight: 800, letterSpacing: 1 }} />
           <Typography variant="h4" sx={{ color: "white", mt: 2 }}>{enrollments[0]?.courses || "Your next breakthrough is one lesson away."}</Typography>
           <Typography sx={{ color: "rgba(255,255,255,.76)", mt: 1 }}>Pick up where you left off and keep your learning streak alive.</Typography>
-          <Button variant="contained" endIcon={<ArrowForward />} sx={{ mt: 3, bgcolor: "white", color: "#5146e5", '&:hover': { bgcolor: '#f2f1ff' } }}>Continue learning</Button>
+          <Button variant="contained" onClick={() => handleDashboardAction('continue')} endIcon={<ArrowForward />} sx={{ mt: 3, bgcolor: "white", color: "#5146e5", '&:hover': { bgcolor: '#f2f1ff' } }}>Continue learning</Button>
         </Box>
         <Box className="hero-orbit" aria-hidden="true"><MenuBook /></Box>
       </Paper>
@@ -72,32 +96,32 @@ const StudentdashboardOverview = () => {
 
       <Box className="dashboard-columns">
         <Paper className="content-panel" elevation={0}>
-          <Box className="panel-heading"><Box><Typography variant="h6">Continue learning</Typography><Typography variant="body2" color="text.secondary">Your active path</Typography></Box><Button size="small" endIcon={<ArrowForward />}>View all</Button></Box>
+          <Box id="continue-learning" className="panel-heading"><Box><Typography variant="h6">Continue learning</Typography><Typography variant="body2" color="text.secondary">Your active path</Typography></Box><Button size="small" onClick={() => handleDashboardAction('continue')} endIcon={<ArrowForward />}>View all</Button></Box>
           {loading ? <Skeleton variant="rounded" height={145} /> : enrollments.length ? enrollments.slice(0, 2).map((enrollment, index) => (
             <Box className="course-row" key={`${enrollment.courses}-${index}`}>
               <Avatar variant="rounded" sx={{ bgcolor: index ? "#fff0ed" : "#eeedff", color: index ? "#f26b5e" : "#5146e5" }}><MenuBook /></Avatar>
               <Box sx={{ flex: 1, minWidth: 0 }}><Typography fontWeight={800} noWrap>{enrollment.courses || "Untitled course"}</Typography><Typography variant="body2" color="text.secondary">Lesson {index + 1} · 18 min left</Typography><LinearProgress variant="determinate" value={enrollment.progress || 0} sx={{ mt: 1.5 }} /></Box>
-              <Button aria-label={`Resume ${enrollment.courses || "course"}`} variant="contained" size="small" startIcon={<PlayArrow />}>Resume</Button>
+              <Button aria-label={`Resume ${enrollment.courses || "course"}`} onClick={() => handleDashboardAction('continue')} variant="contained" size="small" startIcon={<PlayArrow />}>Resume</Button>
             </Box>
           )) : <Box className="empty-state"><MenuBook /><Typography fontWeight={700}>Your learning path starts here</Typography><Typography variant="body2" color="text.secondary">Explore a course to begin building momentum.</Typography></Box>}
         </Paper>
 
-        <Paper className="content-panel" elevation={0}>
+        <Paper id="momentum-panel" className="content-panel" elevation={0}>
           <Box className="panel-heading"><Box><Typography variant="h6">Your momentum</Typography><Typography variant="body2" color="text.secondary">Small wins, every week</Typography></Box><EmojiEvents sx={{ color: "#e7a33e" }} /></Box>
           <Box sx={{ display: "flex", alignItems: "center", gap: 2.5, my: 2 }}><Box className="progress-ring"><Typography variant="h5">{totalProgress}%</Typography></Box><Box><Typography fontWeight={800}>You’re making progress</Typography><Typography variant="body2" color="text.secondary">Keep your 7-day streak going to unlock a new badge.</Typography></Box></Box>
           <Stack direction="row" spacing={1}><Chip icon={<LocalFireDepartment />} label="7 day streak" /><Chip icon={<Star />} label="1,240 XP" /></Stack>
         </Paper>
       </Box>
 
-      <Paper className="content-panel" elevation={0}>
-        <Box className="panel-heading"><Box><Typography variant="h6">Recommended for you</Typography><Typography variant="body2" color="text.secondary">Curated from your learning path</Typography></Box><Button size="small" endIcon={<ArrowForward />}>Explore</Button></Box>
+      <Paper id="recommendations-panel" className="content-panel" elevation={0}>
+        <Box className="panel-heading"><Box><Typography variant="h6">Recommended for you</Typography><Typography variant="body2" color="text.secondary">Curated from your learning path</Typography></Box><Button size="small" onClick={() => handleDashboardAction('recommendations')} endIcon={<ArrowForward />}>Explore</Button></Box>
         <Box className="recommendation-grid">
           {[{ title: "Study smarter, not longer", meta: "Learning skills · 12 min", tone: "#5146e5" }, { title: "Build your next habit", meta: "Personal growth · 8 min", tone: "#4fbf9f" }, { title: "A better way to revise", meta: "Study skills · 15 min", tone: "#f26b5e" }].map((item) => <Box className="recommendation" key={item.title}><Box className="recommendation-mark" sx={{ bgcolor: item.tone }}><Schedule /></Box><Typography fontWeight={800}>{item.title}</Typography><Typography variant="body2" color="text.secondary">{item.meta}</Typography></Box>)}
         </Box>
       </Paper>
 
       <Box className="dashboard-columns dashboard-lower-grid">
-        <Paper className="content-panel goal-panel" elevation={0}>
+        <Paper id="goal-panel" className="content-panel goal-panel" elevation={0}>
           <Box className="panel-heading"><Box><Typography variant="h6">Today&apos;s learning goal</Typography><Typography variant="body2" color="text.secondary">Keep the habit light and consistent</Typography></Box><LocalFireDepartment sx={{ color: "#f26b5e" }} /></Box>
           <Box className="goal-progress-row"><Box className="goal-ring"><Typography variant="h5">{dailyProgress}<Typography component="span" variant="body2">/{dailyGoal}m</Typography></Typography></Box><Box sx={{ flex: 1 }}><Typography fontWeight={800}>{dailyGoal - dailyProgress} minutes to go</Typography><Typography variant="body2" color="text.secondary">A short focused session keeps your streak alive.</Typography><LinearProgress variant="determinate" value={(dailyProgress / dailyGoal) * 100} sx={{ mt: 1.5 }} /></Box></Box>
           <Stack direction="row" spacing={1} sx={{ mt: 2 }}><Chip size="small" label={`${completedAssignments} assignment complete`} /><Chip size="small" label={`${quizzes.length} quizzes ready`} /></Stack>
@@ -109,8 +133,8 @@ const StudentdashboardOverview = () => {
         </Paper>
       </Box>
 
-      <Paper className="content-panel activity-panel" elevation={0}>
-        <Box className="panel-heading"><Box><Typography variant="h6">Recent activity</Typography><Typography variant="body2" color="text.secondary">Your latest learning wins</Typography></Box><Button size="small" endIcon={<ArrowForward />}>View history</Button></Box>
+      <Paper id="activity-panel" className="content-panel activity-panel" elevation={0}>
+        <Box className="panel-heading"><Box><Typography variant="h6">Recent activity</Typography><Typography variant="body2" color="text.secondary">Your latest learning wins</Typography></Box><Button size="small" onClick={() => handleDashboardAction('history')} endIcon={<ArrowForward />}>View history</Button></Box>
         <Box className="activity-list">{activities.map((activity) => <Box className="activity-item" key={activity.title}><Avatar variant="rounded" sx={{ bgcolor: `${activity.tone}18`, color: activity.tone }}>{activity.icon}</Avatar><Box><Typography fontWeight={800}>{activity.title}</Typography><Typography variant="body2" color="text.secondary">{activity.meta}</Typography></Box></Box>)}</Box>
       </Paper>
     </Box>
