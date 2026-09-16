@@ -200,7 +200,7 @@ const StudentReport = () => {
   };
 
   const openCourse = (course) => {
-    navigate("/student/courses", {
+    navigate("/student", {
       state: {
         course,
       },
@@ -894,7 +894,7 @@ const StudentReport = () => {
             <Button
               variant="contained"
               endIcon={<ArrowForward />}
-              onClick={() => navigate("/student/courses")}
+              onClick={() => navigate("/student")}
             >
               Explore courses
             </Button>

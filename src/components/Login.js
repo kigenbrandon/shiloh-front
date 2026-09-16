@@ -43,10 +43,11 @@ const Login = () => {
           localStorage.setItem('userDATA', JSON.stringify(response.data))
 
           if (access_token && username && email && role && refresh_token) {
-            login(access_token, refresh_token, { username, role, email });
-            if (role === 'student') navigate('/enrollment');
-            if (role === 'admin') navigate('/admin');
-            if (role === 'user') navigate('/home');
+            const normalizedRole = role === 'user' ? 'student' : role;
+            login(access_token, refresh_token, { username, role: normalizedRole, email });
+            if (normalizedRole === 'student') navigate('/enrollment');
+            if (normalizedRole === 'admin') navigate('/admin');
+            if (normalizedRole === 'teacher') navigate('/teacher');
           } else {
             setErrorMessage('Invalid login data received.');
           }

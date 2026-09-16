@@ -415,12 +415,12 @@ const SchoolCalendar = () => {
 
   const handleQuickAction = (event) => {
     if (event.type === "quiz") {
-      window.location.href = "/student/quizzes";
+      window.location.href = "/student";
       return;
     }
 
     if (event.type === "assignment") {
-      window.location.href = "/student/assignments";
+      window.location.href = "/student";
       return;
     }
 
@@ -431,7 +431,7 @@ const SchoolCalendar = () => {
       return;
     }
 
-    window.location.href = "/student/courses";
+    window.location.href = "/student";
   };
 
   const formatDate = (date) => {

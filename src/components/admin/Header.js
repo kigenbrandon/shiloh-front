@@ -294,8 +294,9 @@ const Header = () => {
      * If your route is different, change this to
      * your transaction route.
      */
-    navigate("/transactions", {
+    navigate("/admin", {
       state: {
+        adminSection: "transactions",
         selectedTransaction: transaction,
       },
     });
@@ -313,8 +314,9 @@ const Header = () => {
     }
 
     if (event.key === "Enter" && inputValue.trim()) {
-      navigate("/transactions", {
+      navigate("/admin", {
         state: {
+          adminSection: "transactions",
           search: inputValue.trim(),
         },
       });
@@ -369,8 +371,9 @@ const Header = () => {
 
     closeNotifications();
 
-    navigate("/notifications", {
+    navigate("/admin", {
       state: {
+        adminSection: "notifications",
         notification,
       },
     });
@@ -411,8 +414,9 @@ const Header = () => {
 
     closeMessages();
 
-    navigate("/messages", {
+    navigate("/admin", {
       state: {
+        adminSection: "messages",
         message,
       },
     });
@@ -432,12 +436,12 @@ const Header = () => {
 
   const handleProfile = () => {
     closeProfile();
-    navigate("/profile");
+    navigate("/admin", { state: { adminSection: "profile" } });
   };
 
   const handleSettings = () => {
     closeProfile();
-    navigate("/settings");
+    navigate("/admin", { state: { adminSection: "settings" } });
   };
 
   const handleLogout = () => {
@@ -826,8 +830,9 @@ const Header = () => {
 
                         <MenuItem
                           onClick={() => {
-                            navigate("/transactions", {
+                            navigate("/admin", {
                               state: {
+                                adminSection: "transactions",
                                 search: inputValue,
                               },
                             });
@@ -1112,7 +1117,7 @@ const Header = () => {
         <MenuItem
           onClick={() => {
             closeNotifications();
-            navigate("/notifications");
+            navigate("/admin", { state: { adminSection: "notifications" } });
           }}
           sx={{
             py: 1.25,
@@ -1253,7 +1258,7 @@ const Header = () => {
         <MenuItem
           onClick={() => {
             closeMessages();
-            navigate("/messages");
+            navigate("/admin", { state: { adminSection: "messages" } });
           }}
           sx={{
             py: 1.25,

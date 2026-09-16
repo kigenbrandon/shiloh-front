@@ -287,7 +287,7 @@ const Users = () => {
     }
 
     if (userData.role !== "admin") {
-      navigate("/home");
+      navigate("/login");
       return;
     }
 

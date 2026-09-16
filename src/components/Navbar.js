@@ -80,6 +80,16 @@ const Navbar = () => {
               {item.label}
             </Button>
           ))}
+
+          <Button
+            component="a"
+            href="https://shilohcollege.com/"
+            target="_blank"
+            rel="noreferrer"
+            sx={{ color: 'text.secondary', fontWeight: '500' }}
+          >
+            College site
+          </Button>
           
           {isAuthenticated() ? (
             <Button
@@ -140,6 +150,19 @@ const Navbar = () => {
                   </ListItemText>
                 </ListItem>
               ))}
+              <ListItem button onClick={handleMenuClose}>
+                <ListItemText>
+                  <Button
+                    component="a"
+                    href="https://shilohcollege.com/"
+                    target="_blank"
+                    rel="noreferrer"
+                    sx={{ color: '#1976d2', fontWeight: '500', width: '100%' }}
+                  >
+                    College site
+                  </Button>
+                </ListItemText>
+              </ListItem>
               {isAuthenticated() ? (
                 <ListItem button onClick={handleLogout}>
                   <ListItemText>

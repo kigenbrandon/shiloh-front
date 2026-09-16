@@ -20,7 +20,7 @@ import {
 } from "@mui/icons-material";
 import TransactionList from "../components/admin/TransactionList";
 import Header from "../components/admin/Header";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import Users from "../components/admin/Users";
 import FileUpload from "../components/admin/Alumini";
 import FinanceOverview from "../components/admin/FinanceOverview";
@@ -31,11 +31,30 @@ import Books from "../components/admin/Books";
 import Profile from "../components/admin/Profile";
 import Messages from "../components/admin/Messages";
 
+const getAdminSection = (section) => {
+  const sections = {
+    dashboard: <Dashboard />,
+    users: <Users />,
+    transactions: <TransactionList />,
+    alumni: <FileUpload />,
+    finance: <FinanceOverview />,
+    calendar: <SchoolCalendar />,
+    notifications: <Notification />,
+    books: <Books />,
+    profile: <Profile />,
+    settings: <Profile />,
+    messages: <Messages />,
+  };
+
+  return sections[section] || <Dashboard />;
+};
+
 const Admin = () => {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [currentComponent, setCurrentComponent] = useState(<Dashboard />);
   const isSmallScreen = useMediaQuery("(max-width:600px)");
   const navigate = useNavigate();
+  const location = useLocation();
 
   const user = JSON.parse(localStorage.getItem("user"));
 
@@ -45,6 +64,12 @@ const Admin = () => {
       navigate("/login");
     }
   }, [user, navigate]);
+
+  useEffect(() => {
+    if (location.state?.adminSection) {
+      setCurrentComponent(getAdminSection(location.state.adminSection));
+    }
+  }, [location.state]);
 
   const handleLinkClick = (component) => {
     setCurrentComponent(component);

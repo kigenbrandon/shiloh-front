@@ -65,7 +65,6 @@ const Home = () => {
     ? data.quizzes
     : getDemoUser("student").quizzes;
 
-  console.log(getDemoUser("student").courses)
   const courses = enrollments.length
     ? enrollments.slice(0, 3)
     : [
@@ -86,26 +85,26 @@ const Home = () => {
   const upcoming = [
     {
       icon: <AssignmentTurnedIn />,
-      title: "Submit your reflection",
-      course: "Creative Problem Solving",
-      date: "Tomorrow",
+      title: "Submit your ministry reflection",
+      course: "Christian Counselling",
+      date: "This week",
       type: "Assignment",
       color: "#635BFF",
     },
     {
       icon: <Quiz />,
-      title: "Leadership communication quiz",
-      course: "Communication for Leaders",
+      title: "Complete your theology assessment",
+      course: "Theology and Biblical Studies",
       date: "Friday",
       type: "Quiz",
       color: "#F97316",
     },
     {
       icon: <VideoCall />,
-      title: "Live study session",
-      course: "Foundations of Computer Science",
+      title: "Practicum preparation session",
+      course: "Community Service and Leadership",
       date: "Monday · 10:00 AM",
-      type: "Session",
+      type: "Practicum",
       color: "#00A86B",
     },
   ];
@@ -113,20 +112,20 @@ const Home = () => {
   const recentActivity = [
     {
       icon: <CheckCircle />,
-      title: "Completed Introduction to Algorithms",
-      time: "Today · 9:42 AM",
+      title: "Completed a program learning activity",
+      time: "Today · Academic record",
       color: "#00A86B",
     },
     {
       icon: <Quiz />,
-      title: "Scored 86% on your latest quiz",
-      time: "Yesterday · Foundations of Computer Science",
+      title: "Your latest assessment is ready to review",
+      time: "Yesterday · Coursework",
       color: "#635BFF",
     },
     {
       icon: <Groups />,
-      title: "Joined the Computer Science discussion",
-      time: "Yesterday · Community",
+      title: "Reviewed your student service resources",
+      time: "Yesterday · Student centre",
       color: "#F97316",
     },
   ];
@@ -174,7 +173,7 @@ const Home = () => {
                 color="text.secondary"
                 sx={{ display: { xs: "none", sm: "block" } }}
               >
-                Your learning home
+                Student centre · Learn, grow, serve
               </Typography>
             </Box>
 
@@ -201,6 +200,20 @@ const Home = () => {
       </Box>
 
       <Container maxWidth="lg" sx={{ py: { xs: 3, md: 4 } }}>
+        <Card elevation={0} sx={{ mb: 4, overflow: "hidden", border: "1px solid", borderColor: "divider", borderRadius: 3, background: "#fffdf8" }}>
+          <Box sx={{ display: "grid", gridTemplateColumns: { xs: "1fr", md: "1.35fr .65fr" } }}>
+            <CardContent sx={{ p: { xs: 2.5, md: 3.5 } }}>
+              <Typography className="eyebrow">SHILOH COLLEGE · CALLING AND COMPETENCE</Typography>
+              <Typography variant="h5" sx={{ mt: 1.25, fontWeight: 900 }}>Christ-centred education for purposeful service.</Typography>
+              <Typography color="text.secondary" sx={{ mt: 1, maxWidth: 620, lineHeight: 1.7 }}>Your student centre brings together coursework, academic progress, practical preparation, and the services that support your journey from learning to service.</Typography>
+              <Stack direction={{ xs: "column", sm: "row" }} spacing={1.25} sx={{ mt: 2.5 }}>
+                <Button component="a" href="https://shilohcollege.com/programs/" target="_blank" rel="noreferrer" variant="contained" endIcon={<ArrowForward />}>Explore programs</Button>
+                <Button component="a" href="mailto:registrar@shilohcollege.com?subject=Student%20Support%20Request" target="_blank" rel="noreferrer" variant="outlined">Contact Registrar</Button>
+              </Stack>
+            </CardContent>
+            <Box sx={{ minHeight: { xs: 190, md: "100%" }, backgroundImage: "url(https://shilohcollege.com/wp-content/uploads/2022/05/IMG-20171218-WA0027.jpg)", backgroundPosition: "center", backgroundSize: "cover" }} aria-label="Shiloh College students and community members" />
+          </Box>
+        </Card>
         {/* ─────────────────────────────────────
             WELCOME
         ───────────────────────────────────── */}
@@ -502,7 +515,7 @@ const Home = () => {
 
                     <Button
                       component={Link}
-                      to="/courses"
+                      to="/student"
                       variant="contained"
                       startIcon={<PlayArrow />}
                       sx={{
@@ -647,25 +660,25 @@ const Home = () => {
                     {
                       icon: <MenuBook />,
                       title: "Browse courses",
-                      to: "/courses",
+                      to: "/student",
                       color: "#635BFF",
                     },
                     {
                       icon: <AssignmentTurnedIn />,
                       title: "My assignments",
-                      to: "/assignments",
+                      to: "/student",
                       color: "#00A86B",
                     },
                     {
                       icon: <Quiz />,
                       title: "Take a quiz",
-                      to: "/quizzes",
+                      to: "/student",
                       color: "#F97316",
                     },
                     {
                       icon: <Groups />,
                       title: "Visit community",
-                      to: "/community",
+                      to: "/student",
                       color: "#EAB308",
                     },
                   ].map((action) => (
@@ -875,7 +888,7 @@ const Home = () => {
 
                   <Button
                     component={Link}
-                    to="/courses"
+                    to="/student"
                     size="small"
                     sx={{ fontWeight: 800 }}
                   >
@@ -888,7 +901,7 @@ const Home = () => {
                     <Box
                       key={`${course.courses}-${index}`}
                       component={Link}
-                      to="/courses"
+                      to="/student"
                       sx={{
                         textDecoration: "none",
                         color: "inherit",
@@ -1009,7 +1022,7 @@ const Home = () => {
 
               <Button
                 component={Link}
-                to="/community"
+                  to="/student"
                 variant="outlined"
                 endIcon={<ArrowForward />}
                 sx={{

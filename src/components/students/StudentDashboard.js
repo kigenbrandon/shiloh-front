@@ -17,7 +17,7 @@ import EventsPage from "./StudentEvent";
 import FinancePage from "./Finance";
 import StudentsPage from "./Students";
 import AssignmentsPage from "./Assignment";
-import ScheduleClass, { DisplayDummyData } from "./TimeTable";
+import ScheduleClass from "./TimeTable";
 import Courses from "./Courses";
 import { useAuth } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
@@ -111,7 +111,7 @@ const StudentDashboard = () => {
             <Box>
               
                 <>
-                  <Typography variant="overline" sx={{ color: "rgba(255,255,255,.6)", letterSpacing: 1.2 }}>LEARNING SPACE</Typography>
+                  <Typography variant="overline" sx={{ color: "rgba(255,255,255,.6)", letterSpacing: 1.2 }}>SHILOH COLLEGE LMS</Typography>
                   <Typography variant="h6">{user.username}</Typography>
                   <Typography variant="body2" sx={{ color: "rgba(255,255,255,.6)" }}>Student</Typography>
                   <Typography variant="caption" sx={{ color: "rgba(255,255,255,.45)" }}>ID: {user.student?.student_id || "--"}</Typography>
@@ -201,7 +201,7 @@ const StudentDashboard = () => {
             startIcon={<Payment/>}
             onClick={() => handleLinkClick(<FinancePage/>)}
           >
-            payment
+            Finance & payments
           </Button>
           <Divider />
           <Button
